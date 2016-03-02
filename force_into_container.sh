@@ -9,6 +9,6 @@ docker run -it --rm --name compute-$user --cap-add SYS_ADMIN --link shadow-$user
 RUNNING=$(docker inspect --format="{{ .State.Running }}" compute-$user 2> /dev/null)
 
 if [ $? -eq 1 ]; then
-    docker stop shadow-$user
-    docker rm shadow-$user
+    docker stop shadow-$user &> /dev/null
+    docker rm shadow-$user &> /dev/null
 fi
