@@ -1,14 +1,30 @@
 #!/bin/bash
 
 user=$(whoami)
-encfs_passwd=password
-docker run -d --cap-add SYS_ADMIN --device /dev/fuse --name shadow-$user nfs-server $user $encfs_passwd &> /dev/null
+user_passwd=password
 
-docker run -it --rm --net=container:shadow-$user --name compute-$user --cap-add SYS_ADMIN nfs-client
-
-RUNNING=$(docker inspect --format="{{ .State.Running }}" compute-$user 2> /dev/null)
+RUNNING1=$(docker inspect --format="{{ .State.Running }}" shadow-$user 2> /dev/null)
 
 if [ $? -eq 1 ]; then
-    docker stop shadow-$user &> /dev/null
-    docker rm shadow-$user &> /dev/null
+    docker run -d -P --cap-add SYS_ADMIN --device /dev/fuse --name shadow-$user nfs-server $user $user_passwd &> /dev/null
 fi
+
+if [ "$RUNNING1" == "false" ]; then
+    docker restart shadow-$user
+fi
+
+RUNNING2=$(docker inspect --format="{{ .State.Running }}" compute-$user 2> /dev/null)
+
+if [ $? -eq 1 ]; then
+    docker run -d --net=container:shadow-$user --name compute-$user --cap-add SYS_ADMIN nfs-client $user_passwd
+fi
+
+if [ "$RUNNING2" == "false" ]; then
+    docker restart compute-$user
+fi
+
+#    docker stop compute-$user &> /dev/null
+#    docker rm compute-$user &> /dev/null
+
+ssh_port=$(docker port shadow-chu 22 | awk -F: '{print $2}')
+ssh root@localhost -p $ssh_port
