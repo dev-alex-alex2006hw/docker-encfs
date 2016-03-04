@@ -26,5 +26,5 @@ fi
 #    docker stop compute-$user &> /dev/null
 #    docker rm compute-$user &> /dev/null
 
-ssh_port=$(docker port shadow-chu 22 | awk -F: '{print $2}')
+ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
 ssh root@localhost -p $ssh_port
