@@ -4,7 +4,7 @@ user=$(whoami)
 encfs_passwd=password
 docker run -d --cap-add SYS_ADMIN --device /dev/fuse --name shadow-$user nfs-server $user $encfs_passwd &> /dev/null
 
-docker run -it --rm --name compute-$user --cap-add SYS_ADMIN --link shadow-$user:nfs nfs-client 
+docker run -it --rm --net=container:shadow-$user --name compute-$user --cap-add SYS_ADMIN nfs-client
 
 RUNNING=$(docker inspect --format="{{ .State.Running }}" compute-$user 2> /dev/null)
 
