@@ -46,7 +46,7 @@ systemctl restart sshd
 
 for node in `cat $nodelist`
 do
-	ssh-keyscan -t rsa $node >> /etc/ssh/ssh_known_hosts
+    ssh-keyscan -t rsa $node >> /etc/ssh/ssh_known_hosts
 done
 
 cat /etc/ssh/ssh_known_hosts | cut -d" " -f1 > /etc/ssh/shosts.equiv 
