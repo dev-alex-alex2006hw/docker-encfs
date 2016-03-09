@@ -44,13 +44,13 @@ systemctl restart sshd
 
 ##finished local
 
-for node in `cat $nodelist`
+for node in `cat $nodelist | awk '{print $1 "\n" $2}' `
 do
     ssh-keyscan $node >> /etc/ssh/ssh_known_hosts
 done
 
 cat /etc/ssh/ssh_known_hosts | cut -d" " -f1 > /etc/ssh/shosts.equiv 
-for node in `cat $nodelist`
+for node in `cat $nodelist | awk '{print $2}'`
 do
     echo $node:
     scp /etc/ssh/shosts.equiv $node:/etc/ssh/
