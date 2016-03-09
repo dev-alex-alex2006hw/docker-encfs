@@ -1,0 +1,4 @@
+ssh_keys:x:999:
+sshd:x:74:
+vagrant:x:1000:vagrant
+docker:x:992:vagrant

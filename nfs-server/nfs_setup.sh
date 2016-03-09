@@ -10,7 +10,11 @@ mkdir -p /mnt/encrypted
 mkdir -p /data
 rpcbind
 mount -t nfs -o proto=tcp,port=2049 10.0.15.11:/home/public /mnt/encrypted
-echo $enpass | encfs /mnt/encrypted/$user /data -S
+
+userid=$3
+groupid=$4
+
+echo $enpass | encfs /mnt/encrypted/$user /data -S -o uid=$userid -o gid=$groupid
 
 echo "/data $ipaddr(rw,sync,no_subtree_check,fsid=0,no_root_squash)" >> /etc/exports
 
