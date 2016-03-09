@@ -37,6 +37,8 @@ fi
 grep ^EnableSSHKeysign /etc/ssh/ssh_config > /dev/null
 if [ $? -ne 0 ];then
     echo "EnableSSHKeysign yes">>/etc/ssh/ssh_config
+    echo "StrictHostKeyChecking no" >>/etc/ssh/ssh_config
+    echo "CheckHostIP no">>/etc/ssh/ssh_config
 fi
 
 chmod 4755 /usr/libexec/openssh/ssh-keysign
