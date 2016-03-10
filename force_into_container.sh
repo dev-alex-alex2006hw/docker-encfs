@@ -6,7 +6,10 @@ user_passwd=vagrant
 RUNNING1=$(docker inspect --format="{{ .State.Running }}" shadow-$user 2> /dev/null)
 
 if [ $? -eq 1 ]; then
-    docker run -d --hostname $HOSTNAME -P --cap-add SYS_ADMIN --device /dev/fuse --name shadow-$user nfs-server $user $user_passwd `id -u $user` `id -g $user` &> /dev/null
+    docker run -d --hostname $HOSTNAME -P \
+	   --cap-add SYS_ADMIN --device /dev/fuse \
+	   --name shadow-$user nfs-server \
+	   $user $user_passwd `id -u $user` `id -g $user` &> /dev/null
 fi
 
 if [ "$RUNNING1" == "false" ]; then
@@ -20,8 +23,6 @@ if [ $? -eq 1 ]; then
     grep "root\|ssh\|$user" /etc/passwd > /home/$user/.passwd
     grep "root\|ssh\|$user" /etc/group > /home/$user/.group
     
- #   cp /etc/passwd  /home/$user/passwd
- #   cp /etc/group  /home/$user/group
     # --hostname confilt --net, set it in shadow
     docker run -d --net=container:shadow-$user --name compute-$user \
 	   -v /home/$user/.passwd:/etc/passwd \
