@@ -17,15 +17,15 @@ fi
 RUNNING2=$(docker inspect --format="{{ .State.Running }}" compute-$user 2> /dev/null)
 
 if [ $? -eq 1 ]; then
-    grep "root\|ssh\|$user" /etc/passwd > /home/$user/passwd
-    grep "root\|ssh\|$user" /etc/group > /home/$user/group
+    grep "root\|ssh\|$user" /etc/passwd > /home/$user/.passwd
+    grep "root\|ssh\|$user" /etc/group > /home/$user/.group
     
  #   cp /etc/passwd  /home/$user/passwd
  #   cp /etc/group  /home/$user/group
     # --hostname confilt --net, set it in shadow
     docker run -d --net=container:shadow-$user --name compute-$user \
-	   -v /home/$user/passwd:/etc/passwd \
-	   -v /home/$user/group:/etc/group \
+	   -v /home/$user/.passwd:/etc/passwd \
+	   -v /home/$user/.group:/etc/group \
 	   --cap-add SYS_ADMIN nfs-client \
 	   $user $user_passwd &> /dev/null
 fi
@@ -39,8 +39,8 @@ fi
 #    docker rm compute-$user &> /dev/null
 
 ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
-echo $ssh_port > /home/$user/port
-chmod 600 /home/$user/port
+echo $HOSTNAME $ssh_port > /home/$user/.port
+chmod 0600 /home/$user/.port
 
 sleep 3
 #ssh $user@$HOSTNAME -p $ssh_port
