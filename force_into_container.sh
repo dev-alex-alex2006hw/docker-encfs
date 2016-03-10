@@ -22,7 +22,7 @@ if [ $? -eq 1 ]; then
  #   cp /etc/passwd  /home/$user/passwd
  #   cp /etc/group  /home/$user/group
     
-    docker run -d --net=container:shadow-$user --name compute-$user \
+    docker run -d --net=container:shadow-$user --name compute-$user -h $HOSTNAME \
 	   -v /home/$user/passwd:/etc/passwd \
 	   -v /home/$user/group:/etc/group \
 	   --cap-add SYS_ADMIN nfs-client \
