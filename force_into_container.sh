@@ -43,4 +43,4 @@ echo $ssh_port > /home/$user/port
 chmod 600 /home/$user/port
 
 sleep 3
-ssh $user@$HOSTNAME -p $ssh_port
+#ssh $user@$HOSTNAME -p $ssh_port

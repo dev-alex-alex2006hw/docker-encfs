@@ -1,18 +1,7 @@
-Docker NFS Server
-================
-
-Usage
-----
 ```
-server:
-docker build -t nfs-server .
-docker run -d --name nfs --cap-add SYS_ADMIN nfs-server /path/to/share /path/to/share2 /path/to/shareN
-docker exec -it nfs /bin/bash
-
-client:
-docker build -t nfs-client .
-docker run -d --name nfs-client --cap-add SYS_ADMIN --link nfs:nfs nfs-client /path/on/nfs/server:/path/on/client
-docker exec -it nfs-client /bin/bash
-
+need to:
+* prepare sshd_config for the container
+* copy from host: shosts.equiv ssh_host_ecdsa_key  ssh_host_ecdsa_key.pub ssh_host_ed25519_key  ssh_host_ed25519_key.pub ssh_known_hosts
+* not using RSA, ssh_host_*_key permission must be 0600
 ``` 
 
