@@ -37,4 +37,7 @@ fi
 #    docker rm compute-$user &> /dev/null
 
 ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
+echo $ssh_port > /home/$user/port
+chmod 400 /home/$user/port
+
 ssh $user@$HOSTNAME -p $ssh_port
