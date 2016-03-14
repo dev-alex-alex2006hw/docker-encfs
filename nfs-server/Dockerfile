@@ -6,7 +6,7 @@ RUN mkdir -p /exports
 RUN mkdir -p /etc/sv/nfs
 ADD nfs.init /etc/sv/nfs/run
 ADD nfs.stop /etc/sv/nfs/finish
-
+ADD retrieve_pass /usr/local/bin/retrieve_pass
 ADD nfs_setup.sh /usr/local/bin/nfs_setup
 
 VOLUME /exports

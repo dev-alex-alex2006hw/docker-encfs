@@ -2,7 +2,6 @@
 
 set -e
 user=$1
-rootpass=$2
 
 ## 1st part: nfs mount
 ipaddr=$(/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}')
