@@ -2,6 +2,12 @@
 
 user=$(whoami)
 
+## if encfs is not set for account, exit now
+if [ ! -f /home/$user/.encfs6.xml ]; then
+    echo encfs password is not set up for user $user
+    exit 1
+fi
+
 RUNNING1=$(docker inspect --format="{{ .State.Running }}" shadow-$user 2> /dev/null)
 
 if [ $? -eq 1 ]; then
@@ -45,5 +51,6 @@ ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
 echo $HOSTNAME $ssh_port > /home/$user/.port
 chmod 0600 /home/$user/.port
 
-ssh -q -A -X -p $ssh_port $(hostname) "$SSH_ORIGINAL_COMMAND"
+#scp works with these ssh options, -q disables ssh_banner
+ssh -A -X -p $ssh_port $(hostname) "$SSH_ORIGINAL_COMMAND"
 
