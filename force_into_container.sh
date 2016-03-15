@@ -28,15 +28,15 @@ if [ $? -eq 1 ]; then
     echo started : $(date) > /home/$user/.status   
     grep "root\|ssh\|$user" /etc/passwd > /home/$user/.passwd
     grep "root\|ssh\|$user" /etc/group > /home/$user/.group
-    
+        
     # --hostname confilt --net, set it in shadow
     docker run -d --net=container:shadow-$user --name compute-$user \
-	   -v /home/$user/.passwd:/etc/passwd \
-	   -v /home/$user/.group:/etc/group \
+	   -v /home/$user/.passwd:/etc/passwd:ro \
+	   -v /home/$user/.group:/etc/group:ro \
 	   -v /home/$user/.status:/etc/docker_status \
 	   --cap-add SYS_ADMIN nfs-client $user &> /dev/null
-
-    sleep 3
+    
+    sleep 2
 fi
 
 if [ "$RUNNING2" == "false" ]; then
