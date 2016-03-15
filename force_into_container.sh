@@ -19,6 +19,7 @@ fi
 RUNNING2=$(docker inspect --format="{{ .State.Running }}" compute-$user 2> /dev/null)
 
 if [ $? -eq 1 ]; then
+    echo started : $(date) > /home/$user/.status   
     grep "root\|ssh\|$user" /etc/passwd > /home/$user/.passwd
     grep "root\|ssh\|$user" /etc/group > /home/$user/.group
     
@@ -26,7 +27,10 @@ if [ $? -eq 1 ]; then
     docker run -d --net=container:shadow-$user --name compute-$user \
 	   -v /home/$user/.passwd:/etc/passwd \
 	   -v /home/$user/.group:/etc/group \
+	   -v /home/$user/.status:/etc/docker_status \
 	   --cap-add SYS_ADMIN nfs-client $user &> /dev/null
+
+    sleep 3
 fi
 
 if [ "$RUNNING2" == "false" ]; then
@@ -41,5 +45,5 @@ ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
 echo $HOSTNAME $ssh_port > /home/$user/.port
 chmod 0600 /home/$user/.port
 
-sleep 3
-#ssh $user@$HOSTNAME -p $ssh_port
+ssh -q -A -X -p $ssh_port $(hostname) "$SSH_ORIGINAL_COMMAND"
+

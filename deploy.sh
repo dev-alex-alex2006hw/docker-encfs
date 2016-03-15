@@ -1,6 +1,6 @@
 #!/bin/bash
 yum install epel-release -y
-yum install ansible -y
+yum install ansible pdsh -y
 
 cat > /etc/ansible/hosts <<EOF 
 [test]
@@ -23,8 +23,6 @@ EOF
 mkdir -p /etc/pdsh
 grep 10.0. /etc/hosts | awk '{print $2}' > /etc/pdsh/machines
 
-./build_pdsh_rpm.sh
-
 ssh-keygen -t rsa
 for i in `grep 10.0.15 /etc/hosts | awk '{print $2}'`; do
     ssh-keyscan $i;
@@ -32,8 +30,8 @@ done > ~/.ssh/known_hosts
 
 ansible-playbook ssh_key.yml --ask-pass
 
-exec -l $SHELL
-
+source /etc/profile.d/pdsh.sh
+pdsh "yum install -y encfs"
 pdsh "curl -sSL https://get.docker.com/ | sh"
 pdsh "systemctl start docker"
 pdsh "systemctl enable docker"
