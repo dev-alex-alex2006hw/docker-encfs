@@ -12,6 +12,7 @@ docker-encfs
     --- compute-$user shares network config with shadow-$user, including IP, hostname, port binding
     --- compute-$user nfs mounts from ip-of-itself:/data to /home/$user
     --- compute-$user starts sshd to allow user log in and data scp
+    --- second ssh into container compute-$user
 
 * if sshd does not have log in session(i.e. user idle) for 900 seconds, both container expire and get destroyed
 * user only have persistant data in /home/$user, it's aways encrypted 
