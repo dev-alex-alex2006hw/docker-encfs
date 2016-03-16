@@ -16,5 +16,15 @@ inotifywait -m /data &> /dev/null &
 ## compute does not expose 22, shadow does it and compute share same network: --net=container:shadow-$user
 ## sshd does not use pam, use hostbasedauthorization
 mkdir /var/run/sshd
-/usr/sbin/sshd -D 
+/usr/sbin/sshd -D &> /dev/null &
+
+# exit out of idle containers to save resources and to allow opportunities to pull in the lastest container image
+while :; do
+    sleep 900
+    if [ $(ps auwx | grep sshd | grep -v grep | wc -l) -lt 2 ]; then
+	echo compute_idle >> /etc/docker_status
+	sleep 2
+	break
+    fi
+done
 

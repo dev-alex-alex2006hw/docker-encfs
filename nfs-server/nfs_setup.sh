@@ -25,4 +25,13 @@ echo "/data $ipaddr(rw,sync,no_subtree_check,fsid=0,no_root_squash)" >> /etc/exp
 #  echo "$src *(rw,sync,no_subtree_check,fsid=0,no_root_squash)" >> /etc/exports
 #done
 
-exec runsvdir /etc/sv
+runsvdir /etc/sv &> /dev/null &
+
+## if compute is idle then exit shadow too
+while :; do
+    sleep 900
+    if grep "compute_idle" /etc/docker_status &> /dev/null; then
+	sleep 5
+	break
+    fi
+done
