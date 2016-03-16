@@ -10,8 +10,10 @@ fi
 
 RUNNING1=$(docker inspect --format="{{ .State.Running }}" shadow-$user 2> /dev/null)
 
+echo ssh loged $(date) > /home/$user/.status
+
 if [ $? -eq 1 ]; then
-    echo $(date) > /home/$user/.status   
+
     docker run -i --rm --hostname $HOSTNAME -P \
 	   -v /home/$user/.status:/etc/docker_status \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
