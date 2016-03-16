@@ -17,6 +17,7 @@ docker-encfs
 * if sshd does not have log in session(i.e. user idle) for 900 seconds, both container expire and get destroyed
 * user only have persistant data in /home/$user, it's aways encrypted
 * compute-$user only have account root and $user
+* user need to be added to docker group: usermod -aG docker $user
 * both docker container needs to be built first before user can log in, all user use same containers
 * encfs password needs to be set before user can log in
 * hostbased ssh authorization need to be set
