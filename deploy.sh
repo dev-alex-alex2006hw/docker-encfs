@@ -1,6 +1,6 @@
 #!/bin/bash
 yum install epel-release -y
-yum install ansible pdsh -y
+yum install ansible pdsh nfs-utils -y
 
 cat > /etc/ansible/hosts <<EOF 
 [test]
@@ -37,5 +37,10 @@ pdsh "systemctl start docker"
 pdsh "systemctl enable docker"
 pdsh "usermod -aG docker vagrant"
 
+cat >> /etc/exports <<EOF
+/home *(rw,sync,no_subtree_check,fsid=0,no_root_squash)
+EOF
+systemctl start nfs-server
+systemctl enable nfs-server
 
-
+pdsh -x test1 "mount -t nfs -o proto=tcp,port=2049 10.0.15.11:/home /home"
