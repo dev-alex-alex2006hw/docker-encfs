@@ -7,10 +7,9 @@ if [ ! -f /home/$user/.encfs6.xml ]; then
     echo encfs password is not set up for user $user
     exit 1
 fi
+echo ssh loged $(date) > /home/$user/.status
 
 RUNNING1=$(docker inspect --format="{{ .State.Running }}" shadow-$user 2> /dev/null)
-
-echo ssh loged $(date) > /home/$user/.status
 
 if [ $? -eq 1 ]; then
 
