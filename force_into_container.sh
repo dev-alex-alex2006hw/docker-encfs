@@ -34,7 +34,8 @@ if [ $? -eq 1 ]; then
 	   -v /home/$user/.group:/etc/group:ro \
 	   -v /home/$user/.status:/etc/docker_status \
 	   --cap-add SYS_ADMIN nfs-client $user &> /dev/null &
-    sleep 2
+
+    sleep 3
 fi
 
 ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
