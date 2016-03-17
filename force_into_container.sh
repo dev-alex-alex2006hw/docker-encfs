@@ -50,10 +50,15 @@ while :; do
     fi
 done
 
-sleep 1
 ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
 #echo $HOSTNAME $ssh_port > /home/$user/.port
 #chmod 0600 /home/$user/.port
+
+while :; do
+    if ssh -q -p $ssh_port $(hostname) date &> /dev/null ; then
+	break
+    fi
+done
 
 #scp works with these ssh options, -q disables ssh_banner
 ssh -A -X -p $ssh_port $(hostname) "$SSH_ORIGINAL_COMMAND"
