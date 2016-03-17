@@ -9,21 +9,29 @@ if [ ! -f /home/$user/.encfs6.xml ]; then
 fi
 echo ssh loged $(date) > /home/$user/.status
 
-RUNNING1=$(docker inspect --format="{{ .State.Running }}" shadow-$user 2> /dev/null)
+check_shadow(){
+    docker inspect --format="{{ .State.Running }}" shadow-$user &> /dev/null
+}
 
-if [ $? -eq 1 ]; then
+check_compute(){
+    docker inspect --format="{{ .State.Running }}" compute-$user &> /dev/null
+}
 
+if ! check_shadow ; then
     docker run -i --rm --hostname $HOSTNAME -P \
 	   -v /home/$user/.status:/etc/docker_status \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
 	   --name shadow-$user nfs-server \
 	   $user `id -u $user` `id -g $user` &> /dev/null &
-    sleep 1
 fi
 
-RUNNING2=$(docker inspect --format="{{ .State.Running }}" compute-$user 2> /dev/null)
+while :; do
+    if check_shadow ; then
+	break
+    fi
+done
 
-if [ $? -eq 1 ]; then
+if ! check_compute ; then
     echo compute started >> /home/$user/.status   
     grep "root\|ssh\|$user" /etc/passwd > /home/$user/.passwd
     grep "root\|ssh\|$user" /etc/group > /home/$user/.group
@@ -34,10 +42,15 @@ if [ $? -eq 1 ]; then
 	   -v /home/$user/.group:/etc/group:ro \
 	   -v /home/$user/.status:/etc/docker_status \
 	   --cap-add SYS_ADMIN nfs-client $user &> /dev/null &
-
-    sleep 3
 fi
 
+while :; do
+    if check_compute ; then
+	break
+    fi
+done
+
+sleep 1
 ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
 #echo $HOSTNAME $ssh_port > /home/$user/.port
 #chmod 0600 /home/$user/.port
