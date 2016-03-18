@@ -49,3 +49,12 @@ systemctl enable nfs-server
 
 pdsh -x test1 "mount -t nfs 10.0.15.11:/home /home"
 pdsh -x test1 "mount -t nfs 10.0.15.11:/opt /opt"
+
+./host_based_ssh.sh
+
+pdsh "copy /vagrant /tmp -fr"
+pdsh "cd /tmp/vagrant; ./build_container.sh"
+
+encfs /home/vagrant /mnt
+
+fusermount -u /mnt
