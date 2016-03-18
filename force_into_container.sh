@@ -26,10 +26,10 @@ if ! check_shadow ; then
 fi
 
 while :; do
-    sleep 0.5
     if check_shadow ; then
 	break
     fi
+    sleep 0.5
 done
 
 if ! check_compute ; then
@@ -46,10 +46,10 @@ if ! check_compute ; then
 fi
 
 while :; do
-    sleep 0.5
     if check_compute ; then
 	break
     fi
+    sleep 0.5
 done
 
 ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
@@ -57,10 +57,10 @@ ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
 #chmod 0600 /home/$user/.port
 
 while :; do
-    sleep 0.5
     if ssh -q -p $ssh_port $(hostname) date &> /dev/null ; then
 	break
     fi
+    sleep 0.5
 done
 
 #scp works with these ssh options, -q disables ssh_banner
