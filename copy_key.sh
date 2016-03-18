@@ -6,3 +6,6 @@ cp /etc/ssh/ssh_host_ed25519_key nfs-client/
 cp /etc/ssh/ssh_host_ed25519_key.pub nfs-client/
 
 chmod 0600 nfs-client/ssh_host_*_key
+
+cp /etc/ssh/ssh_known_hosts nfs-client/
+cp /etc/ssh/shosts.equiv nfs-client/
