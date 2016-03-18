@@ -26,6 +26,7 @@ if ! check_shadow ; then
 fi
 
 while :; do
+    sleep 0.5
     if check_shadow ; then
 	break
     fi
@@ -45,6 +46,7 @@ if ! check_compute ; then
 fi
 
 while :; do
+    sleep 0.5
     if check_compute ; then
 	break
     fi
@@ -55,6 +57,7 @@ ssh_port=$(docker port shadow-$user 22 | awk -F: '{print $2}')
 #chmod 0600 /home/$user/.port
 
 while :; do
+    sleep 0.5
     if ssh -q -p $ssh_port $(hostname) date &> /dev/null ; then
 	break
     fi
