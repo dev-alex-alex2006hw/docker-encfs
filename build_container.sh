@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker build -t nfs-server nfs-server/
-. /copy_key.sh
+./copy_key.sh
 docker build -t nfs-client nfs-client/
 cp force_into_container.sh /usr/local/bin
 
