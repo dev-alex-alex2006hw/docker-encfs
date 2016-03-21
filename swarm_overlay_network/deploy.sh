@@ -4,6 +4,7 @@
 docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap
 
 ## docker engine to listen on 2375 on each node,(for swarm) give key store location(to use overlay network)
+## docker service need to be stoped and disabled, not starting via systemctl
 pdsh -w test[2-3] "docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-store=consul://10.0.15.11:8500 --cluster-advertise=enp0s8:2375 &> /dev/null &"
 
 ## swarm master node
