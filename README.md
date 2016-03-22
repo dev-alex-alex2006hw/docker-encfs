@@ -1,6 +1,6 @@
 
 ```
-docker-encfs
+login workflow:
 
 - user ssh -> sshd ForceCommand "force_into_container.sh"
    -- start nfs-server container shadow-$user
