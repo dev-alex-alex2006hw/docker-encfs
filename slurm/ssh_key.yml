@@ -1,0 +1,30 @@
+- hosts: all
+  sudo: no
+  gather_facts: no
+  remote_user: root
+
+  tasks:
+    - name: install ssh key
+      authorized_key: user=root key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}" state=present
+
+    - yum: name=epel-release
+      
+    - yum: name={{ item }}
+      with_items:
+        - redhat-lsb-core
+        - ntp
+        - atop
+        - dstat
+        - munge
+        - munge-devel
+        
+    - lineinfile:  dest=/etc/hosts line="{{ item }}"
+      with_items:
+        - 10.0.15.11 test1
+        - 10.0.15.12 test2
+        - 10.0.15.13 test3
+          
+    - service: name=ntpd state=started enabled=yes
+    - service: name=firewalld state=stopped enabled=no
+    - selinux: state=disabled
+
