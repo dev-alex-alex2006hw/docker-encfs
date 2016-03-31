@@ -1,0 +1,45 @@
+ #localhost
+- hosts: 127.0.0.1
+  connection: local
+  sudo: no
+  gather_facts: no
+  remote_user: root
+
+  tasks:
+  - name: install slurm required rpm
+    yum: name={{ item }}
+    with_items:
+      - gcc
+      - gcc-c++
+      - mailx
+      - make
+      - munge
+      - munge-devel
+      - munge-libs
+      - openssl
+      - openssl-devel
+      - pam-devel
+      - perl
+      - perl-ExtUtils-MakeMaker
+      - readline-devel
+      - rpm-build
+      - mysql-devel
+
+  - name: build slurm rpm
+    shell: "wget http://www.schedmd.com/download/latest/slurm-{{ slurm_version }}.tar.bz2; rpmbuild -ta slurm-{{ slurm_version }}.tar.bz2"
+      
+  - name: create munge key
+    command: create-munge-key
+
+# - hosts: all
+#   sudo: no
+#   gather_facts: no
+#   remote_user: root
+
+#   roles:
+#     - slurm
+      
+
+    
+
+        
