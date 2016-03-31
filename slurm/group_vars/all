@@ -1,1 +1,3 @@
 slurm_version: 15.08.9
+slurmctld_IP: 10.0.15.11
+slurmctld_hostname: test1
