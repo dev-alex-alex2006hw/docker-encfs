@@ -28,4 +28,56 @@ yum install -y  gcc gcc-c++ mailx make munge munge-devel munge-libs openssl open
 # --with percs       %_with_percs         1     build percs RPM
 # --without readline %_without_readline   1     don't require readline-devel RPM to be installed
 
+slurm_prefix=/opt/slurm/$version
+
+echo %_prefix $slurm_prefix > ~/.rpmmacros
 rpmbuild -ta slurm-$version.tar.bz2
+
+yum install -y ~/rpmbuild/RPMS/x86_64/slurm*.rpm
+# still need to sync to nodes
+# grep -v /opt $(rpm -qlp slurm*.rpm) | sort
+# /etc/init.d/slurm
+# /etc/init.d/slurmdbd
+# /etc/ld.so.conf.d
+# /etc/ld.so.conf.d/slurm.conf
+# /etc/slurm
+# /etc/slurm/cgroup_allowed_devices_file.conf.example
+# /etc/slurm/cgroup.conf.example
+# /etc/slurm/cgroup.release_common.example
+# /etc/slurm/cgroup/release_cpuset
+# /etc/slurm/cgroup/release_freezer
+# /etc/slurm/cgroup/release_memory
+# /etc/slurm/layouts.d.power.conf.example
+# /etc/slurm/layouts.d.power_cpufreq.conf.example
+# /etc/slurm/slurm.conf.example
+# /etc/slurm/slurmdbd.conf.example
+# /etc/slurm/slurm.epilog.clean
+# /lib64/security/pam_slurm_adopt.so
+# /lib64/security/pam_slurm.so
+# /usr/lib/systemd/system/slurmctld.service
+# /usr/lib/systemd/system/slurmdbd.service
+# /usr/lib/systemd/system/slurmd.service
+# /usr/sbin/rcslurm
+# /usr/sbin/rcslurmdbd
+
+
+cat > /etc/profile.d/slurm.sh <<EOF
+#!/bin/sh
+export PATH=$slurm_prefix/bin:$slurm_prefix/sbin:$PATH
+
+if [ -z "$LD_LIBRARY_PATH" ]; then
+ export LD_LIBRARY_PATH=:
+fi
+export LD_LIBRARY_PATH=$slurm_prefix/lib:$LD_LIBRARY_PATH
+
+if [ -z "$MANPATH" ] ; then
+ export MANPATH=:
+fi
+export MANPATH=$slurm_prefix/share/man:$MANPATH
+EOF
+
+chmod +x /etc/profile.d/slurm.sh  # need to sync to nodes
+
+useradd -r slurm  # create system user, no home, no-login
+
+
