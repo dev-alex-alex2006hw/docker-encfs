@@ -1,17 +1,21 @@
 - name: copy slurm rpm to nodes
   copy: src={{ item }} dest=/usr/local/src/
   with_fileglob:
-    - "{{ slurm_rpm_location }}"
-    
+    - /root/rpmbuild/RPMS/x86_64/slurm*.rpm
+        
 - lineinfile: dest=/etc/hosts line="{{ slurmctld_IP }} {{ slurmctld_hostname }}"
+
+- name: install munge
+  yum: name=munge
+  
+- name: copy munge key to host
+  copy: src=/etc/munge/munge.key dest=/etc/munge/munge.key owner=munge group=munge mode=0600 force=yes
 
 - name: install slurm rpm
   yum: name={{ item }}
   with_fileglob:
     - /usr/local/src/slurm*.rpm
 
-- name: copy munge key to host
-  copy: src=/etc/munge/munge.key dest=/etc/munge/munge.key owner=munge group=munge mode=0600 force=yes
 
     
 

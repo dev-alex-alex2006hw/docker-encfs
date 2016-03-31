@@ -25,19 +25,28 @@
       - rpm-build
       - mysql-devel
 
+  - stat: path=/root/rpmbuild/RPMS/x86_64/slurm-{{ slurm_version }}-1.el7.centos.x86_64.rpm
+    register: rpm
+    
   - name: build slurm rpm
     shell: "wget http://www.schedmd.com/download/latest/slurm-{{ slurm_version }}.tar.bz2; rpmbuild -ta slurm-{{ slurm_version }}.tar.bz2"
-      
+    when: rpm.stat.exists == False
+    # rpm created /root/rpmbuild/RPMS/x86_64/slurm*.rpm
+
+  - stat: path=/etc/munge/munge.key
+    register: munge_key
+    
   - name: create munge key
     command: create-munge-key
+    when: munge_key.stat.exists == False
 
-# - hosts: all
-#   sudo: no
-#   gather_facts: no
-#   remote_user: root
-
-#   roles:
-#     - slurm
+- hosts: all
+  sudo: no
+  gather_facts: no
+  remote_user: root
+      
+  roles:
+    - slurm
       
 
     
