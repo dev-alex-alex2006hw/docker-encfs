@@ -1,0 +1,40 @@
+  - name: install slurm required rpm
+    yum: name={{ item }}
+    with_items:
+      - gcc
+      - gcc-c++
+      - mailx
+      - make
+      - munge
+      - munge-devel
+      - munge-libs
+      - openssl
+      - openssl-devel
+      - pam-devel
+      - perl
+      - perl-ExtUtils-MakeMaker
+      - readline-devel
+      - rpm-build
+      - mysql-devel
+
+  - stat: path=/root/rpmbuild/RPMS/x86_64/slurm-{{ slurm_version }}-1.el7.centos.x86_64.rpm
+    register: rpm
+
+  - stat: path=slurm-{{ slurm_version }}.tar.bz2
+    register: tar
+    
+  - name: download tar file
+    shell: "wget http://www.schedmd.com/download/latest/slurm-{{ slurm_version }}.tar.bz2"
+    when: tar.stat.exists == False
+
+  - name: build slurm rpm  
+    shell: "rpmbuild -ta slurm-{{ slurm_version }}.tar.bz2"
+    when: rpm.stat.exists == False
+    # rpm created /root/rpmbuild/RPMS/x86_64/slurm*.rpm
+
+  - stat: path=/etc/munge/munge.key
+    register: munge_key
+    
+  - name: create munge key
+    command: create-munge-key
+    when: munge_key.stat.exists == False
