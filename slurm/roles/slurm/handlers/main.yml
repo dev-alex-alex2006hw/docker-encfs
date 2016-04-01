@@ -1,2 +1,7 @@
-- name: restart_slurm
-  service: name=slurm state=restarted
+- name: restart_slurmctld 
+  service: name=slurmctld state=restarted
+  when: inventory_hostname == "{{ slurmctld_hostname }}"
+  
+- name: restart_slurmd 
+  service: name=slurmd state=restarted 
+  when: inventory_hostname != "{{ slurmctld_hostname }}"

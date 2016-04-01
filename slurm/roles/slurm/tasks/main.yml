@@ -20,18 +20,24 @@
     - /usr/local/src/slurm*.rpm
 
 - name: create slurm system user
-  user: name=slurm shell=/bin/false system=yes
+  user: name=slurm createhome=no shell=/bin/false system=yes
 
 - name: create state save location
   file: path={{ state_save_location }} state=directory owner=slurm group=slurm mode=0755
   
 - name: copy slurm conf file
   template: src=slurm.conf.j2 dest=/etc/slurm/slurm.conf mode=0644
-  notify: restart_slurm
+  notify:
+    - restart_slurmctld
+    - restart_slurmd
 
-- name: start slurm service
-  service: name=slurm state=started enabled=yes
-
+- name: start slurmctld service
+  service: name=slurmctld state=started enabled=yes
+  when: inventory_hostname == "{{ slurmctld_hostname }}"
+  
+- name: start slurmd service
+  service: name=slurmd state=started enabled=yes
+  when: inventory_hostname != "{{ slurmctld_hostname }}"
 
     
 
