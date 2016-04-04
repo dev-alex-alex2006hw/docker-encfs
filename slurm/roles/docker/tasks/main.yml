@@ -1,0 +1,9 @@
+- name: install docker
+  shell: "curl -sSL https://get.docker.com/ | sh"
+
+- name: start and enable docker service on head node
+  service: name=docker state=started enabled=yes
+  
+- name: start consul container on head node 
+  shell: "if ! docker inspect --format="{{ .State.Running }}" consul &> /dev/null; then docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap; fi"
+  

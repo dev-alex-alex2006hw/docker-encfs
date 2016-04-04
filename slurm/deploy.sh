@@ -1,5 +1,5 @@
 #!/bin/bash
-yum install epel-release -y
+#yum install epel-release -y
 yum install ansible pdsh nfs-utils -y
 
 cat > /etc/ansible/hosts <<EOF 
@@ -31,6 +31,8 @@ for i in `grep 10.0.15 /etc/hosts | awk '{print $2}'`; do
     ssh-keyscan $i;
 done > ~/.ssh/known_hosts
 
+sed -i "/127.0.0.1/c\127.0.0.1 localhost" /etc/hosts
+
 ansible-playbook ssh_key.yml --ask-pass
 
 source /etc/profile.d/pdsh.sh
@@ -41,8 +43,8 @@ source /etc/profile.d/pdsh.sh
 # pdsh "usermod -aG docker vagrant"
 
 cat >> /etc/exports <<EOF
-/home *(rw,sync,no_subtree_check,fsid=0,no_root_squash)
-/opt *(rw,sync,no_subtree_check,fsid=0,no_root_squash)
+/home *(rw,sync,no_subtree_check,no_root_squash)
+/opt *(rw,sync,no_subtree_check,no_root_squash)
 EOF
 systemctl start nfs-server
 systemctl enable nfs-server
@@ -50,11 +52,8 @@ systemctl enable nfs-server
 pdsh -x test1 "mount -t nfs 10.0.15.11:/home /home"
 pdsh -x test1 "mount -t nfs 10.0.15.11:/opt /opt"
 
-./host_based_ssh.sh nodelist
 
-#pdsh "cp /vagrant /tmp -fr"
-#pdsh "cd /tmp/vagrant; ./build_container.sh"
 
-#encfs /home/vagrant /mnt
 
-#fusermount -u /mnt
+
+
