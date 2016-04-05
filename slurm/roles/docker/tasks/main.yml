@@ -6,7 +6,10 @@
   when: inventory_hostname == "{{ consul_host }}"
   
 - name: start consul container on consul node 
-  shell: "if ! docker restart consul &> /dev/null; then docker run -d -p {{ consul_port }}:{{ consul_port }} --name=consul progrium/consul -server -bootstrap; fi"
+  shell: "{{ item }}"
+  with_items:
+    - "if ! docker inspect consul | grep Pid &> /dev/null; then docker run -d -p {{ consul_port }}:{{ consul_port }} --name=consul progrium/consul -server -bootstrap; fi"
+    - "if docker inspect consul | grep exited &> /dev/null; then docker restart consul; fi"
   when: inventory_hostname == "{{ consul_host }}"
 
 - name: custom docker systemd start script on compute nodes
