@@ -1,5 +1,12 @@
 cluster_name: test
+
 slurm_version: 15.08.9
 slurmctld_IP: 10.0.15.11
 slurmctld_hostname: test1
 state_save_location: /usr/local/slurm/checkpoint
+
+consul_host: test1
+consul_IP: 10.0.15.11
+consul_port: 8500
+docker_daemon_port: 2375
+docker_cluster_interface: enp0s8

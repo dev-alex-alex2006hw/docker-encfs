@@ -3,14 +3,24 @@
 
 - name: start and enable docker service on consul node
   service: name=docker state=started enabled=yes
-  when: inventory_hostname == "{{ consul_hostname }}"
+  when: inventory_hostname == "{{ consul_host }}"
   
 - name: start consul container on consul node 
-  shell: "if ! docker inspect --format="{{ .State.Running }}" consul &> /dev/null; then docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap; fi"
-  when: inventory_hostname == "{{ consul_hostname }}"
+  shell: "if ! docker restart consul &> /dev/null; then docker run -d -p {{ consul_port }}:{{ consul_port }} --name=consul progrium/consul -server -bootstrap; fi"
+  when: inventory_hostname == "{{ consul_host }}"
 
-- name: custom docker systemd start script 
-  copy: src=docker.service dest=/usr/lib/systemd/system/docker.service owner=root group=root mode=0644  
-
+- name: custom docker systemd start script on compute nodes
+  copy: src=docker.service dest=/usr/lib/systemd/system/docker.service owner=root group=root mode=0644
+  when: inventory_hostname != "{{ consul_host }}"
+  notify: reload_systemd
+  
 - name: docker sysconfig file to listen on port 2375 and consul store
-  template: src=docker.j2 dest=/etc/sysconfig/docker owner=root group=root mode=0644  
+  template: src=docker.j2 dest=/etc/sysconfig/docker owner=root group=root mode=0644
+  when: inventory_hostname != "{{ consul_host }}"
+  notify: restart_docker
+  
+- name: start and enable docker service on compute node
+  service: name=docker state=started enabled=yes
+  when: inventory_hostname != "{{ consul_host }}"
+
+  
