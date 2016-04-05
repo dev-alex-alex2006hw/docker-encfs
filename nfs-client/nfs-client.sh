@@ -20,7 +20,7 @@ mkdir /var/run/sshd
 
 # exit out of idle containers to save resources and to allow opportunities to pull in the lastest container image
 while :; do
-    sleep 900
+    sleep 90
     if [ $(ps auwx | grep sshd | grep -v grep | wc -l) -lt 2 ]; then
 	echo compute_idle >> /etc/docker_status
 	sleep 2

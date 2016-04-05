@@ -29,7 +29,7 @@ runsvdir /etc/sv &> /dev/null &
 
 ## if compute is idle then exit shadow too
 while :; do
-    sleep 900
+    sleep 90
     if grep "compute_idle" /etc/docker_status &> /dev/null; then
 	sleep 5
 	break
