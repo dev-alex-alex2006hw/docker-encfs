@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# run by user invoking srun command  when job complte
+
+# stop slurmd containers
+
+# rm slurmd containers
+
+
+# stop nfsd container
+
+# rm nfsd container
+
+# stop slurmctld container
+
+# rm slurmctld container
+
+# rm overlay network

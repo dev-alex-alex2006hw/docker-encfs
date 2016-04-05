@@ -1,7 +1,11 @@
-- name: slurm conf PrologSlurmctld
-  lineinfile: dest=/etc/slurm/slurm.conf regexp="^PrologSlurmctld"  line="PrologSlurmctld=/usr/local/slurm/prolog_ctld" 
-  when: inventory_hostname == "{{ slurmctld_hostname }}"
+- name: slurm conf SrunProlog
+  lineinfile: dest=/etc/slurm/slurm.conf regexp="^SrunProlog"  line="SrunProlog=/usr/local/slurm/SrunProlog" 
   
-- name: PrologSlurmctld file
-  copy: src=prolog_ctld dest=/usr/local/slurm/prolog_ctld owner=root group=root mode=0755
-  when: inventory_hostname == "{{ slurmctld_hostname }}"
+- name: SrunProlog file
+  copy: src=SrunProlog dest=/usr/local/slurm/SrunProlog owner=root group=root mode=0755
+
+- name: slurm conf SrunEpilog
+  lineinfile: dest=/etc/slurm/slurm.conf regexp="^SrunEpilog"  line="SrunProlog=/usr/local/slurm/SrunEpilog" 
+  
+- name: SrunEpilog file
+  copy: src=SrunEpilog dest=/usr/local/slurm/SrunEpilog owner=root group=root mode=0755
