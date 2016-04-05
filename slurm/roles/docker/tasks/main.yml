@@ -1,9 +1,16 @@
-- name: install docker
+- name: install docker on all nodes
   shell: "curl -sSL https://get.docker.com/ | sh"
 
-- name: start and enable docker service on head node
+- name: start and enable docker service on consul node
   service: name=docker state=started enabled=yes
+  when: inventory_hostname == "{{ consul_hostname }}"
   
-- name: start consul container on head node 
+- name: start consul container on consul node 
   shell: "if ! docker inspect --format="{{ .State.Running }}" consul &> /dev/null; then docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap; fi"
-  
+  when: inventory_hostname == "{{ consul_hostname }}"
+
+- name: custom docker systemd start script 
+  copy: src=docker.service dest=/usr/lib/systemd/system/docker.service owner=root group=root mode=0644  
+
+- name: docker sysconfig file to listen on port 2375 and consul store
+  template: src=docker.j2 dest=/etc/sysconfig/docker owner=root group=root mode=0644  

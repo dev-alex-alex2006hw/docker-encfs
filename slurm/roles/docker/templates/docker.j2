@@ -1,0 +1,1 @@
+OPTIONS='--cluster-store=consul://{{ consul_IP }}:{{ consul_port }} --cluster-advertise={{ docker_cluster_interface }}:{{ docker_daemon_port }} -H tcp://0.0.0.0:{{ docker_daemon_port }} -H unix:///var/run/docker.sock'
