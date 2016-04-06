@@ -5,7 +5,7 @@
   copy: src=SrunProlog dest=/usr/local/slurm/SrunProlog owner=root group=root mode=0755
 
 - name: slurm conf SrunEpilog
-  lineinfile: dest=/etc/slurm/slurm.conf regexp="^SrunEpilog"  line="SrunProlog=/usr/local/slurm/SrunEpilog" 
+  lineinfile: dest=/etc/slurm/slurm.conf regexp="^SrunEpilog"  line="SrunEpilog=/usr/local/slurm/SrunEpilog" 
   
 - name: SrunEpilog file
   copy: src=SrunEpilog dest=/usr/local/slurm/SrunEpilog owner=root group=root mode=0755
