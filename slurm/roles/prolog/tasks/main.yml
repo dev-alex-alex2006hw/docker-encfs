@@ -4,6 +4,12 @@
 - name: SrunProlog file
   copy: src=SrunProlog dest=/usr/local/slurm/SrunProlog owner=root group=root mode=0755
 
+- name: slurm conf TaskProlog
+  lineinfile: dest=/etc/slurm/slurm.conf regexp="^TaskProlog"  line="TaskProlog=/usr/local/slurm/TaskProlog" 
+  
+- name: TaskProlog file
+  copy: src=TaskProlog dest=/usr/local/slurm/TaskProlog owner=root group=root mode=0755
+
 - name: slurm conf SrunEpilog
   lineinfile: dest=/etc/slurm/slurm.conf regexp="^SrunEpilog"  line="SrunEpilog=/usr/local/slurm/SrunEpilog" 
   

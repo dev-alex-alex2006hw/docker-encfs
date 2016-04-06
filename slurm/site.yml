@@ -15,8 +15,8 @@
       
   roles:
 #    - slurm
-    - docker
-      
+#    - docker
+    - prolog     
 
     
 

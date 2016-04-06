@@ -1,25 +1,33 @@
 #!/bin/bash
 
-# run by user invoking srun command Prior to launching job step
+echo "srun arguments are: $@"
+ssh test2 "sleep 10;echo OKOKOK"
 
-sctld_host=`scontrol show hostnames $SLURM_NODELIST | head -n1`
-nfsd_host=`scontrol show hostnames $SLURM_NODELIST | tail -n1`
+echo "*** errors below can be ignored ***"
+scancel --quiet $SLURM_JOBID
 
-#create overlay network per JOB
-ssh $sctld_host "docker network create -d overlay slurm$SLURM_JOBID"
 
-#slurmctld per JOB
-ssh $sctld_host "docker run -d --name slurmctld-$SLURM_JOBID --net slurm$SLURM_JOBID slurmctld_image"
 
-#nfsd per JOB
-ssh $nfsd_host "docker run -d --name nfsd-$SLURM_JOBID --net slurm$SLURM_JOBID nfsd_image"
+# # run by user invoking srun command Prior to launching job step
 
-#get nfsd IP, inspect does not like _ and -
-nfsd_ip=`ssh $nfsd_host "docker inspect -f '{{ .NetworkSettings.Networks.slurm$SLURM_JOBID.IPAddress }}' nfsd-$SLURM_JOBID"`
+# sctld_host=`scontrol show hostnames $SLURM_NODELIST | head -n1`
+# nfsd_host=`scontrol show hostnames $SLURM_NODELIST | tail -n1`
 
-for i in `scontrol show hostnames $SLURM_NODELIST`; do
-    ssh  $i "docker run -d --name slurmd-$SLURM_JOBID-$i --net slurm$SLURM_JOBID slurmd_image "
-done
+# #create overlay network per JOB
+# ssh $sctld_host "docker network create -d overlay slurm$SLURM_JOBID"
+
+# #slurmctld per JOB
+# ssh $sctld_host "docker run -d --name slurmctld-$SLURM_JOBID --net slurm$SLURM_JOBID slurmctld_image"
+
+# #nfsd per JOB
+# ssh $nfsd_host "docker run -d --name nfsd-$SLURM_JOBID --net slurm$SLURM_JOBID nfsd_image"
+
+# #get nfsd IP, inspect does not like _ and -
+# nfsd_ip=`ssh $nfsd_host "docker inspect -f '{{ .NetworkSettings.Networks.slurm$SLURM_JOBID.IPAddress }}' nfsd-$SLURM_JOBID"`
+
+# for i in `scontrol show hostnames $SLURM_NODELIST`; do
+#     ssh  $i "docker run -d --name slurmd-$SLURM_JOBID-$i --net slurm$SLURM_JOBID slurmd_image "
+# done
 
 
 
