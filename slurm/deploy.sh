@@ -1,5 +1,5 @@
 #!/bin/bash
-#yum install epel-release -y
+yum install epel-release -y
 yum install ansible pdsh nfs-utils -y
 
 cat > /etc/ansible/hosts <<EOF 
