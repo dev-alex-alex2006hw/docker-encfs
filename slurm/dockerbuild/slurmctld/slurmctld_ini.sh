@@ -1,7 +1,7 @@
 #!/bin/bash
 
 slurmctl_host=$1
-slurmctl_addr=`ping $slurmctld_host -c 1 | grep PING | awk '{print $3}' | sed 's/\((\|)\)//g'`
+slurmctl_addr=`ping $slurmctl_host -c 1 | grep PING | awk '{print $3}' | sed 's/\((\|)\)//g'`
 nodelist=$2
 
 # munge auth
