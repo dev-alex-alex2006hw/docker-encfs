@@ -35,7 +35,16 @@ node2
  2:perf_event:/docker/6f2c89d86b0745155ff336327b704201b8b5cd25ee062e439c82d1ac7903e174
  1:name=systemd:/docker/6f2c89d86b0745155ff336327b704201b8b5cd25ee062e439c82d1ac7903e174
 
+## slurmd add $user, mount encfs inside and use "runuser -u $user COMMAND"
+## e.g. runuser -l test1 -c 'umask 0077; whoami > /tmp/test1/7'
 
-no need to expose port 6817
+grep "root\|$user" /etc/passwd > /home/$user/.passwd
+grep "root\|$user" /etc/group > /home/$user/.group
+
+docker run -d --name node1 --hostname node1 --net stack \
+           -v /home/$user/.passwd:/etc/passwd:ro \ 
+	   -v /home/$user/.group:/etc/group:ro \
+	   --cap-add SYS_ADMIN --device /dev/fuse \
+	   compute/slurmd slurmctld node[1-2] $user
 
 ```
