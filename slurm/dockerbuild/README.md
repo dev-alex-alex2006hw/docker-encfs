@@ -41,10 +41,19 @@ node2
 grep "root\|$user" /etc/passwd > /home/$user/.passwd
 grep "root\|$user" /etc/group > /home/$user/.group
 
+scratch=/somedir
+
 docker run -d --name node1 --hostname node1 --net stack \
            -v /home/$user/.passwd:/etc/passwd:ro \ 
 	   -v /home/$user/.group:/etc/group:ro \
+	   -v /home/$user:/mnt/encry1 \
+	   -v $scratch:/mnt/encry2 \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
 	   compute/slurmd slurmctld node[1-2] $user
+
+docker exec -i node1 /usr/local/bin/setup_encfs $user `id -u $user` `id -g $user`
+
+cp /home/$user/.encfs6.xml $scratch
+echo $enpass | encfs $scratch /scratch -S -o uid=$userid -o gid=$groupid
 
 ```
