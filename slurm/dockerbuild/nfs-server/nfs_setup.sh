@@ -14,7 +14,7 @@ groupid=$3
 
 echo $enpass | encfs /mnt/encrypted/$user /data -S -o uid=$userid -o gid=$groupid
 
-echo "/data *(rw,sync,no_subtree_check,no_root_squash)" >> /etc/exports
+echo "/data *(rw,sync,no_subtree_check,fsid=0,no_root_squash)" >> /etc/exports
 
 runsvdir /etc/sv 
 
