@@ -1,0 +1,19 @@
+#!/bin/bash
+user=$1
+userid=$2
+groupid=$3
+
+enpass=$(/usr/local/bin/retrieve_pass $user)
+# /home dir docker run -d -v /home/$user:/mnt/encry1
+mkdir -p /home/$user
+chown -R $userid:$groupid /home/$user
+chmod 0700 /home/$user
+
+echo $enpass | encfs /mnt/encry1 /home/$user -S -o uid=$userid -o gid=$groupid
+
+# /scratch dir docker run -d -v $scratch:/mnt/encry2
+#mkdir -p /scratch
+#chown -R $userid:$groupid /scratch
+#chmod 0700 /scratch
+
+#echo $enpass | encfs /mnt/encry2 /scratch -S -o uid=$userid -o gid=$groupid
