@@ -10,4 +10,10 @@ for i in `seq 21 22`; do
 	   -v /home/$user:/mnt/encry1 \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
 	   compute/slurmd:encfs slurmctld2 node2[1-2]
+
+    docker exec -i node$i /usr/local/bin/setup_encfs vagrant 1000 1000
 done
+
+sleep 5
+docker exec -it node21 runuser -l vagrant -c "srun -n2 hostname"
+
