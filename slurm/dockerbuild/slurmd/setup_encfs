@@ -1,15 +1,20 @@
 #!/bin/bash
+
 user=$1
 userid=$2
 groupid=$3
 
+cat /etc/upasswd >> /etc/passwd
+cat /etc/ugroup >> /etc/group
+
 enpass=$(/usr/local/bin/retrieve_pass $user)
 # /data dir docker run -d -v /proj_dir:/mnt/encry1
 mkdir -p /data
-chown -R $userid:$groupid /data
+chown $userid:$groupid /data
 chmod 0700 /data
+usermod -d /data $user
 
-echo $enpass | encfs /mnt/encry1 /data -o uid=$userid -o gid=$groupid
+runuser -l $user -c "echo $enpass | encfs /mnt/encry1 /data -S -o uid=$userid -o gid=$groupid"
 
 # /scratch dir docker run -d -v $scratch:/mnt/encry2
 #mkdir -p /scratch
