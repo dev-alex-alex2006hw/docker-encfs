@@ -35,25 +35,27 @@ node2
  2:perf_event:/docker/6f2c89d86b0745155ff336327b704201b8b5cd25ee062e439c82d1ac7903e174
  1:name=systemd:/docker/6f2c89d86b0745155ff336327b704201b8b5cd25ee062e439c82d1ac7903e174
 
-## slurmd add $user, mount encfs inside and use "runuser -u $user COMMAND"
-## e.g. runuser -l test1 -c 'umask 0077; whoami > /tmp/test1/7'
+## test
+#!/bin/bash
+user=vagrant
+grep "$user" /etc/passwd > /home/$user/.passwd
+grep "$user" /etc/group > /home/$user/.group
 
-grep "root\|$user" /etc/passwd > /home/$user/.passwd
-grep "root\|$user" /etc/group > /home/$user/.group
+for i in `seq 21 22`; do
+    docker run -d --name node$i --hostname node$i --net stack2 \
+    	       -v /home/$user/.passwd:/etc/upasswd \
+               -v /home/$user/.group:/etc/ugroup \
+	       -v /home/$user:/mnt/encry1 \
+	       --cap-add SYS_ADMIN --device /dev/fuse \
+	       compute/slurmd:encfs slurmctld2 node2[1-2]
 
-scratch=/somedir
+    docker exec -i node$i /usr/local/bin/setup_encfs vagrant 1000 1000
+done
 
-docker run -d --name node1 --hostname node1 --net stack \
-           -v /home/$user/.passwd:/etc/passwd:ro \ 
-	   -v /home/$user/.group:/etc/group:ro \
-	   -v /home/$user:/mnt/encry1 \
-	   -v $scratch:/mnt/encry2 \
-	   --cap-add SYS_ADMIN --device /dev/fuse \
-	   compute/slurmd slurmctld node[1-2] $user
+sleep 5
+docker exec -it node21 runuser -l vagrant -c "srun -n2 hostname"
 
-docker exec -i node1 /usr/local/bin/setup_encfs $user `id -u $user` `id -g $user`
-
-cp /home/$user/.encfs6.xml $scratch
-echo $enpass | encfs $scratch /scratch -S -o uid=$userid -o gid=$groupid
+node21
+node22
 
 ```
