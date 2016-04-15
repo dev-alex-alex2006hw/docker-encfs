@@ -8,5 +8,5 @@ cat /etc/ugroup >> /etc/group
 sed -i "/SlurmUser=/c\SlurmUser=$user" /etc/slurm/slurm.conf
 sed -i "/SlurmdUser=/c\SlurmdUser=$user" /etc/slurm/slurm.conf
 
-runuser -l $user -c '/usr/sbin/slurmctld -D -v -c &> /var/log/slurmctld.log &'
+runuser -l $user -c '/usr/sbin/slurmctld -D -v -c &> /tmp/slurmctld.log &'
 
