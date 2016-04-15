@@ -20,7 +20,6 @@ RUN yum --enablerepo=epel install -y fuse-encfs munge /usr/local/src/*.rpm \
 COPY slurm.conf /etc/slurm/slurm.conf
 COPY retrieve_pass /usr/local/bin/retrieve_pass
 COPY setup_encfs /usr/local/bin/setup_encfs
-COPY qsub /usr/bin/qsub
 
 COPY slurmd_ini.sh /usr/local/bin/slurmd_ini.sh
 ENTRYPOINT ["/usr/local/bin/slurmd_ini.sh"]
