@@ -1,14 +1,15 @@
 #!/bin/bash
 
 user=$1
-mkdir /home/$user
-chown $user /home/$user
 
 cat /etc/upasswd >> /etc/passwd
 cat /etc/ugroup >> /etc/group
 
 sed -i "/SlurmUser=/c\SlurmUser=$user" /etc/slurm/slurm.conf
 sed -i "/SlurmdUser=/c\SlurmdUser=$user" /etc/slurm/slurm.conf
+
+mkdir /home/$user
+chown $user /home/$user
 
 runuser -l $user -c '/usr/sbin/slurmctld -D -v -c &> /tmp/slurmctld.log &'
 
