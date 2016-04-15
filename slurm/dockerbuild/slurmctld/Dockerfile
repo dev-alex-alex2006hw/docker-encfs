@@ -3,6 +3,7 @@ FROM centos
 
 COPY slurm_rpm /usr/local/src/
 COPY epel.repo /etc/yum.repos.d/epel.repo
+COPY RPM-GPG-KEY-EPEL-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
 
 RUN yum install -y munge /usr/local/src/*.rpm 
     && chown -R root:root /var/log/munge \

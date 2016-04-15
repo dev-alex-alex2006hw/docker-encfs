@@ -3,8 +3,8 @@ FROM centos
 
 COPY slurm_rpm /usr/local/src/
 COPY epel.repo /etc/yum.repos.d/epel.repo
-
-RUN yum install -y fuse-encfs munge /usr/local/src/*.rpm 
+COPY RPM-GPG-KEY-EPEL-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+RUN yum --enablerepo=epel install -y fuse-encfs munge /usr/local/src/*.rpm \
     && chown -R root:root /var/log/munge \
     && chown -R root:root /var/lib/munge \
     && mkdir -p /var/run/munge \
