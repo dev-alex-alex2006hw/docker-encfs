@@ -3,7 +3,7 @@
 user=vagrant
 stack=stack
 slctld=slurmctld
-nodelist=node[1-2]
+nodelist=node[1-5]
 
 grep "$user" /etc/passwd > /home/$user/.passwd
 grep "$user" /etc/group > /home/$user/.group
@@ -28,5 +28,5 @@ for i in `seq 1 5`; do
 done
 
 sleep 5
-docker exec -it node21 runuser -l vagrant -c "srun -N 5 hostname"
+docker exec -it node1 runuser -l vagrant -c "srun -N 5 hostname"
 

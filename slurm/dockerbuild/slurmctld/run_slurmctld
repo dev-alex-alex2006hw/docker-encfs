@@ -1,6 +1,8 @@
 #!/bin/bash
 
 user=$1
+mkdir /home/$user
+chown $user /home/$user
 
 cat /etc/upasswd >> /etc/passwd
 cat /etc/ugroup >> /etc/group
