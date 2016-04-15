@@ -19,7 +19,7 @@ sed -i "/NodeName=/c\NodeName=$nodelist Procs=1 State=UNKNOWN" /etc/slurm/slurm.
 sed -i "/PartitionName=/c\PartitionName=main Nodes=$nodelist Default=YES MaxTime=INFINITE State=UP" /etc/slurm/slurm.conf
 
 # slurmctld daemon
-/usr/sbin/slurmctld -D -v -c &> /var/log/slurmctld.log &
+#/usr/sbin/slurmctld -D -v -c &> /var/log/slurmctld.log &
 
 while :; do
     sleep 900

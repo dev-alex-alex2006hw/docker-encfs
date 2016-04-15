@@ -16,6 +16,7 @@ RUN yum install -y munge /usr/local/src/*.rpm \
     && chmod 0600 /etc/munge/munge.key 
 
 COPY slurm.conf /etc/slurm/slurm.conf
+COPY run_slurmctld /usr/local/bin/run_slurmctld
 
 COPY slurmctld_ini.sh /usr/local/bin/slurmctld_ini.sh
 ENTRYPOINT ["/usr/local/bin/slurmctld_ini.sh"]

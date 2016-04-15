@@ -1,0 +1,8 @@
+#!/bin/bash
+
+user=$1
+
+sed -i "/SlurmUser=/c\SlurmUser=$user" /etc/slurm/slurm.conf
+sed -i "/SlurmdUser=/c\SlurmdUser=$user" /etc/slurm/slurm.conf
+
+runuser -l $user -c '/usr/sbin/slurmd -D -v  &> /var/log/slurmd.log &'

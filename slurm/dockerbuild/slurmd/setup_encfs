@@ -13,9 +13,9 @@ mkdir -p /data
 chown $userid:$groupid /data
 usermod -d /data $user
 
-#runuser -l $user -c "echo $enpass | encfs /mnt/encry1 /data -S -o uid=$userid -o gid=$groupid"
-echo $enpass | encfs /mnt/encry1 /data -S --public
-chmod 0700 /data
+runuser -l $user -c "echo $enpass | encfs /mnt/encry1 /data -S -o uid=$userid -o gid=$groupid"
+#echo $enpass | encfs /mnt/encry1 /data -S --public
+#chmod 0700 /data
 
 # /scratch dir docker run -d -v $scratch:/mnt/encry2
 #mkdir -p /scratch
