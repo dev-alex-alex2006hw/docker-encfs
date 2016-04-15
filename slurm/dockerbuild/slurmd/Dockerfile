@@ -2,19 +2,20 @@
 FROM centos
 
 COPY slurm_rpm /usr/local/src/
-RUN yum install -y /usr/local/src/*.rpm epel-release
+COPY epel.repo /etc/yum.repos.d/epel.repo
 
-COPY munge.key /etc/munge/munge.key
-RUN chown -R root:root /var/log/munge \
+RUN yum install -y fuse-encfs munge /usr/local/src/*.rpm 
+    && chown -R root:root /var/log/munge \
     && chown -R root:root /var/lib/munge \
     && mkdir -p /var/run/munge \
     && chown -R root:root /var/run/munge\
     && chown -R root:root /etc/munge \
+    && touch /etc/munge/munge.key \
     && chmod 0600 /etc/munge/munge.key \
     && mkdir /mnt/encry1 \
-    && mkdir /mnt/encry2 \
-    && yum install -y fuse-encfs
+    && mkdir /mnt/encry2 
 
+COPY munge.key /etc/munge/munge.key
 COPY slurm.conf /etc/slurm/slurm.conf
 COPY retrieve_pass /usr/local/bin/retrieve_pass
 COPY setup_encfs /usr/local/bin/setup_encfs

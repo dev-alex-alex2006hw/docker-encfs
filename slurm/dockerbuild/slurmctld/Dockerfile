@@ -2,16 +2,18 @@
 FROM centos
 
 COPY slurm_rpm /usr/local/src/
-RUN yum install -y /usr/local/src/*.rpm
+COPY epel.repo /etc/yum.repos.d/epel.repo
 
-COPY munge.key /etc/munge/munge.key
-RUN chown -R root:root /var/log/munge \
+RUN yum install -y munge /usr/local/src/*.rpm 
+    && chown -R root:root /var/log/munge \
     && chown -R root:root /var/lib/munge \
     && mkdir -p /var/run/munge \
     && chown -R root:root /var/run/munge\
     && chown -R root:root /etc/munge \
-    && chmod 0600 /etc/munge/munge.key
+    && touch /etc/munge/munge.key \
+    && chmod 0600 /etc/munge/munge.key 
 
+COPY munge.key /etc/munge/munge.key
 COPY slurm.conf /etc/slurm/slurm.conf
 
 COPY slurmctld_ini.sh /usr/local/bin/slurmctld_ini.sh
