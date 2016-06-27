@@ -48,4 +48,16 @@ all other places are not secure and will be wiped clean after you log out!!
 2:blkio:/docker/ae955db802e5786167fe392af47c9752eda68c95c91f5169e470033528c57375
 1:name=systemd:/docker/ae955db802e5786167fe392af47c9752eda68c95c91f5169e470033528c57375
 
+Better Security:
+
+only allow a user to access a particular container:
+
+cat /usr/bin/docker-cmd
+#!/bin/sh
+docker run -ti --rm centos /bin/bash
+
+After writing the script, configure sudoers to run it:
+
+grep user1 /etc/sudoers
+user1        ALL=(ALL)       NOPASSWD: /usr/bin/docker-cmd
 ```
