@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+user=$1
+userid=$2
+groupid=$3
+
+enpass=$(/usr/local/bin/retrieve_pass $user)
+
+mkdir -p /mnt/do_not_use
+mkdir -p /home/$user
+
+echo $enpass | encfs /mnt/do_not_use /home/$user -S -o uid=$userid -o gid=$groupid
+
+/usr/sbin/sshd -D &> /dev/null &
+
+# # exit out of idle containers to save resources and to allow opportunities to pull in the lastest container image
+while :; do
+    sleep 90000
+    if [ $(ps auwx | grep sshd | grep -v grep | wc -l) -lt 2 ]; then
+	break
+    fi
+done
+
