@@ -11,6 +11,7 @@ if ! check_compute ; then
        -v /home/$user:/mnt/do_not_use \
        -v /etc/passwd:/etc/passwd:ro \
        -v /etc/group:/etc/group:ro \
+       -v /home/$user \
        --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
        --cap-add SYS_ADMIN --device /dev/fuse \
        --name compute-$user compute \

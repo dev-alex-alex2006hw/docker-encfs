@@ -5,9 +5,6 @@ user=$1
 
 enpass=$(/usr/local/bin/retrieve_pass $user)
 
-mkdir -p /mnt/do_not_use
-mkdir -p /home/$user
-
 echo $enpass | encfs /mnt/do_not_use /home/$user -S --public
 
 /usr/sbin/sshd -D &> /dev/null &
