@@ -12,5 +12,5 @@ while :; do
 done
 
 #scp works with these ssh options, -q disables ssh_banner
-ssh -A -X -p $ssh_port $(hostname) "$SSH_ORIGINAL_COMMAND"
+ssh -q -A -X -p $ssh_port $(hostname) "$SSH_ORIGINAL_COMMAND"
 

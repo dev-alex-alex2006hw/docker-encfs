@@ -16,6 +16,19 @@ login workflow:
 * encfs password needs to be set before user can log in
 * hostbased ssh authorization need to be set
 
+on host:
+# tail /etc/ssh/sshd_config
+ UseDNS no
+ GSSAPIAuthentication no
+ HostbasedAuthentication yes
+ HostbasedUsesNameFromPacketOnly yes
+ RhostsRSAAuthentication yes
+ IgnoreRhosts no
+
+Match User *,!root
+      ForceCommand /usr/bin/force_into_container.sh
+
+
 Better Security:
 
 only allow a user to access a particular container:

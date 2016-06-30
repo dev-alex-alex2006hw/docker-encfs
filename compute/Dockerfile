@@ -1,6 +1,6 @@
 FROM centos:centos7
 
-RUN yum install -y openssh-server epel-release && \
+RUN yum install -y openssh-server openssh-clients epel-release && \
     yum install -y fuse-encfs 
 
 COPY sshd_config /etc/ssh/sshd_config
