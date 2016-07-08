@@ -38,7 +38,6 @@ pdsh "yum install -y encfs"
 pdsh "curl -sSL https://get.docker.com/ | sh"
 pdsh "systemctl start docker"
 pdsh "systemctl enable docker"
-pdsh "usermod -aG docker vagrant"
 
 cat >> /etc/exports <<EOF
 /home *(rw,sync,no_subtree_check,fsid=0,no_root_squash)
@@ -52,8 +51,6 @@ pdsh -x test1 "mount -t nfs 10.0.15.11:/opt /opt"
 
 ./host_based_ssh.sh nodelist
 
-pdsh "cp /vagrant /tmp -fr"
-pdsh "cd /tmp/vagrant; ./build_container.sh"
 
 encfs /home/vagrant /mnt
 
