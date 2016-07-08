@@ -5,12 +5,12 @@
 
 - lineinfile: dest=/etc/hosts line="{{ server_IP }} {{ server_hostname }}"
 
-- file: src=nodes dest=/var/spool/torque/server_priv/nodes
+- file: src=nodes dest=/var/spool/torque/server_priv/nodes owner=root group=root mode=0644
   when: inventory_hostname == "{{ server_hostname }}"
   
-- template: src=server_name.j2 dest=/var/spool/torque/server_name
+- template: src=server_name.j2 dest=/var/spool/torque/server_name owner=root group=root mode=0644
 
-- template: src=config.j2 dest=/var/spool/torque/mom_priv/config
+- template: src=config.j2 dest=/var/spool/torque/mom_priv/config owner=root group=root mode=0644
 
 - name: install torque rpm
   yum: name={{ item }}

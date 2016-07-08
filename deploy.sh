@@ -41,17 +41,8 @@ pdsh "systemctl enable docker"
 
 cat >> /etc/exports <<EOF
 /home *(rw,sync,no_subtree_check,fsid=0,no_root_squash)
-/opt *(rw,sync,no_subtree_check,fsid=0,no_root_squash)
 EOF
 systemctl start nfs-server
 systemctl enable nfs-server
 
 pdsh -x test1 "mount -t nfs 10.0.15.11:/home /home"
-pdsh -x test1 "mount -t nfs 10.0.15.11:/opt /opt"
-
-./host_based_ssh.sh nodelist
-
-
-encfs /home/vagrant /mnt
-
-fusermount -u /mnt

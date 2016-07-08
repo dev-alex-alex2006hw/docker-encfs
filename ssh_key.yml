@@ -17,3 +17,9 @@
 
     - service: name=ntpd state=started enabled=yes
 
+    - name: /etc/hosts 
+      lineinfile: dest=/etc/hosts line="{{ item }}"
+      with_items:
+        - "10.0.15.11 test1"
+        - "10.0.15.12 test2"
+        - "10.0.15.13 test3"
