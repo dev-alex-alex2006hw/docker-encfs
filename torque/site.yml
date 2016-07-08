@@ -1,0 +1,16 @@
+#  #localhost
+- hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  remote_user: root
+
+  roles:
+    - localbuild
+
+- hosts: all
+  sudo: no
+  gather_facts: no
+  remote_user: root
+      
+  roles:
+    - torque

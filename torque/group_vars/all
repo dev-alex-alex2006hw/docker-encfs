@@ -1,2 +1,2 @@
 server_hostname: test1
-server_IP:
+server_IP: 10.0.15.11

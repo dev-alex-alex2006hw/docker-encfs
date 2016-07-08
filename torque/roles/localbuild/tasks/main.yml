@@ -14,7 +14,7 @@
     register: rpm
     
   - name: download tar file and build rpm
-    shell: {{ item }}
+    shell: "{{ item }}"
     with_items:
       - "wget http://wpfilebase.s3.amazonaws.com/torque/torque-6.0.1-1456945733_daea91b.tar.gz"
       - "tar -xzvf torque-6.0.1-1456945733_daea91b.tar.gz"

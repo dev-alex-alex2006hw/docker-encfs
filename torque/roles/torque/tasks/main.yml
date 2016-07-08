@@ -5,12 +5,6 @@
 
 - lineinfile: dest=/etc/hosts line="{{ server_IP }} {{ server_hostname }}"
 
-- file: src=nodes dest=/var/spool/torque/server_priv/nodes owner=root group=root mode=0644
-  when: inventory_hostname == "{{ server_hostname }}"
-  
-- template: src=server_name.j2 dest=/var/spool/torque/server_name owner=root group=root mode=0644
-
-- template: src=config.j2 dest=/var/spool/torque/mom_priv/config owner=root group=root mode=0644
 
 - name: install torque rpm
   yum: name={{ item }}
@@ -26,15 +20,22 @@
     - /usr/local/src/torque-debuginfo-6.0.1-1.adaptive.el7.centos.x86_64.rpm
   when: inventory_hostname != "{{ server_hostname }}"
 
-- service: name=trqauthd state=started enabled=yes
+- copy: src=nodes dest=/var/spool/torque/server_priv/nodes owner=root group=root mode=0644
+  when: inventory_hostname == "{{ server_hostname }}"
+  
+- template: src=server_name.j2 dest=/var/spool/torque/server_name owner=root group=root mode=0644
 
-- service: name={{ item }} state=started enabled=yes
+- template: src=config.j2 dest=/var/spool/torque/mom_priv/config owner=root group=root mode=0644
+
+- service: name=trqauthd state=restarted enabled=yes
+
+- service: name={{ item }} state=restarted enabled=yes
   with_items:
     - pbs_server
     - pbs_sched
   when: inventory_hostname == "{{ server_hostname }}"
 
-- service: name=pbs_mom state=started enabled=yes
+- service: name=pbs_mom state=restarted enabled=yes
   when: inventory_hostname != "{{ server_hostname }}"
   
 
