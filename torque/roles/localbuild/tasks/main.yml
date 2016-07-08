@@ -1,0 +1,29 @@
+  - name: install required rpm
+    yum: name={{ item }}
+    with_items:
+      - gcc
+      - gcc-c++
+      - boost-devel
+      - make
+      - openssl
+      - openssl-devel
+      - rpm-build
+      - libxml2-devel
+
+  - stat: path=/root/rpmbuild/RPMS/x86_64/torque-6.0.1-1.adaptive.el7.centos.x86_64.rpm
+    register: rpm
+    
+  - name: download tar file and build rpm
+    shell: {{ item }}
+    with_items:
+      - "wget http://wpfilebase.s3.amazonaws.com/torque/torque-6.0.1-1456945733_daea91b.tar.gz"
+      - "tar -xzvf torque-6.0.1-1456945733_daea91b.tar.gz"
+      - "mv torque-6.0.1-1456945733_daea91b torque-6.0.1"
+      - "tar -czvf torque-6.0.1.tar.gz torque-6.0.1"
+      - "mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}"
+      - "cp torque-6.0.1.tar.gz /root/rpmbuild/SOURCES"
+      - "chown -R root:root torque-6.0.1"
+      - "rpmbuild -ba torque-6.0.1/torque.spec"
+    when: rpm.stat.exists == False
+
+
