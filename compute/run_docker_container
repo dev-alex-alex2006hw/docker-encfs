@@ -1,6 +1,6 @@
 #!/bin/bash
 
-user=$1
+user=$LOGNAME
 
 check_compute(){
     docker inspect --format="{{ .State.Running }}" compute-$user &> /dev/null

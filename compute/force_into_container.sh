@@ -1,8 +1,6 @@
 #!/bin/bash
 
-user=$(whoami)
-
-ssh_port=$(sudo /usr/bin/docker-cmd $user)
+ssh_port=$(sudo /usr/bin/run_docker_container)
 
 while :; do
     if ssh -q -p $ssh_port $(hostname) date &> /dev/null ; then
