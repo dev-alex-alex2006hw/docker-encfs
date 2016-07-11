@@ -4,7 +4,8 @@
     - /root/rpmbuild/RPMS/x86_64/torque*.rpm
 
 - lineinfile: dest=/etc/hosts line="{{ server_IP }} {{ server_hostname }}"
-
+- lineinfile: dest=/etc/hosts.equiv line='{{ item }}' create=yes
+  with_items: "{{ job_submit_host }}"
 
 - name: install torque rpm
   yum: name={{ item }}
@@ -27,15 +28,18 @@
 
 - template: src=config.j2 dest=/var/spool/torque/mom_priv/config owner=root group=root mode=0644
 
-- service: name=trqauthd state=restarted enabled=yes
+- name: trqauthd service
+  service: name=trqauthd state=restarted enabled=yes
 
-- service: name={{ item }} state=restarted enabled=yes
+- name: pbs_server and pbs_sched service
+  service: name={{ item }} state=restarted enabled=yes
   with_items:
     - pbs_server
     - pbs_sched
   when: inventory_hostname == "{{ server_hostname }}"
 
-- service: name=pbs_mom state=restarted enabled=yes
+- name: pbs_mom service
+  service: name=pbs_mom state=restarted enabled=yes
   when: inventory_hostname != "{{ server_hostname }}"
   
 

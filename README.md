@@ -1,13 +1,23 @@
 
 ```
-login workflow:
 
+login1:(test1)
+login-pd: ssh force into container (test2)
+
+pbs_server: (test3)
+node1: prolog, job_starter, epilog for container (test4)
+node2: (test5)
+
+audit: store encfs key and passwd (test6)
+registry: store/provide docker images (test6)
+
+login-pd:
 - user ssh -> sshd ForceCommand "force_into_container.sh"
     --- start container login-$user
     --- login-$user starts sshd to allow user log in and data scp
     --- second ssh into container compute-$user
 
-* if sshd does not have log in session(i.e. user idle) for 900 seconds, both container expire and get destroyed
+* if sshd does not have log in session(i.e. user idle) for 900 seconds, container will expire and get destroyed
 * hostbased ssh authorization 
 
 on host:

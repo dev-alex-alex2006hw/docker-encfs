@@ -1,2 +1,3 @@
-server_hostname: test1
-server_IP: 10.0.15.11
+server_hostname: test3
+server_IP: 10.0.15.13
+job_submit_host: ["test1","test2"]
