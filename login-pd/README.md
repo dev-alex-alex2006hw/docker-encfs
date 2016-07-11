@@ -13,4 +13,5 @@ Defaults   env_keep += "LOGNAME"
 %hipaa ALL=(ALL) NOPASSWD: /usr/bin/run_docker_container
 
 ssh keys need to be copied to container, it is missing
+hostbased ssh need to cover all compute nodes, otherwise files cannot be copied over
 ```

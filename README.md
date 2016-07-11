@@ -18,7 +18,7 @@ login-pd:
     --- second ssh into container compute-$user
 
 * if sshd does not have log in session(i.e. user idle) for 900 seconds, container will expire and get destroyed
-* hostbased ssh authorization 
+* hostbased ssh authorization inside container, need to have all compute nodes for torque
 
 on host:
 # tail /etc/ssh/sshd_config
