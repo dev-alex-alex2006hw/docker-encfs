@@ -2,30 +2,30 @@
 
 user=$LOGNAME
 
-check_compute(){
-    docker inspect --format="{{ .State.Running }}" compute-$user &> /dev/null
+check_container(){
+    docker inspect --format="{{ .State.Running }}" login-$user &> /dev/null
 }
 
-if ! check_compute ; then
+if ! check_container ; then
   docker run -i --rm --hostname $HOSTNAME -P \
-       -v /home/$user:/mnt/do_not_use \
+       -v /home/$user/encrypted:/mnt/do_not_use \
        -v /etc/passwd:/etc/passwd:ro \
        -v /etc/group:/etc/group:ro \
        -v /home/$user \
        --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
        --cap-add SYS_ADMIN --device /dev/fuse \
-       --name compute-$user compute \
+       --name login-$user 10.0.15.16:5000/login \
        $user &> /dev/null &
 fi
 
 while :; do
-    if check_compute ; then
+    if check_container ; then
 	break
     fi
     sleep 0.5
 done
 
-docker port compute-$user 22 | awk -F: '{print $2}'
+docker port login-$user 22 | awk -F: '{print $2}'
 
 
 
