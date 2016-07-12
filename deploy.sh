@@ -4,7 +4,7 @@ yum install ansible pdsh nfs-utils -y
 
 cat > /etc/ansible/hosts <<EOF 
 [test]
-test[1:3]
+test[1:6]
 
 EOF
 
@@ -13,7 +13,9 @@ cat > nodelist <<EOF
 10.0.15.11 test1
 10.0.15.12 test2
 10.0.15.13 test3
-
+10.0.15.14 test4
+10.0.15.15 test5
+10.0.15.16 test6
 EOF
 
 cat nodelist >> /etc/hosts
