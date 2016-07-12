@@ -10,6 +10,7 @@ chmod 0700 /mnt/do_not_use
 echo $enpass | encfs /mnt/do_not_use /home/$user -S --public
 
 /usr/sbin/sshd -D &> /dev/null &
+/usr/sbin/trqauthd &> /dev/null &
 
 # # exit out of idle containers to save resources and to allow opportunities to pull in the lastest container image
 while :; do
