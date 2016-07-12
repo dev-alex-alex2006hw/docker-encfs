@@ -14,4 +14,8 @@ Defaults   env_keep += "LOGNAME"
 
 ssh keys need to be copied to container, it is missing
 hostbased ssh need to cover all compute nodes, otherwise files cannot be copied over
+
+sshd_config on host:
+Match User *,!root
+      ForceCommand /usr/bin/force_into_container.sh
 ```
