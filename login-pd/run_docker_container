@@ -7,15 +7,16 @@ check_container(){
 }
 
 if ! check_container ; then
-  docker run -i --rm --hostname $HOSTNAME -P \
-       -v /home/$user/encrypted:/mnt/do_not_use \
-       -v /etc/passwd:/etc/passwd:ro \
-       -v /etc/group:/etc/group:ro \
-       -v /home/$user \
-       --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
-       --cap-add SYS_ADMIN --device /dev/fuse \
-       --name login-$user 10.0.15.16:5000/login \
-       $user &> /dev/null &
+    docker pull 10.0.15.16:5000/login &> /dev/null
+    docker run -i --rm --hostname $HOSTNAME -P \
+	   -v /home/$user/encrypted:/mnt/do_not_use \
+	   -v /etc/passwd:/etc/passwd:ro \
+	   -v /etc/group:/etc/group:ro \
+	   -v /home/$user \
+	   --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
+	   --cap-add SYS_ADMIN --device /dev/fuse \
+	   --name login-$user 10.0.15.16:5000/login \
+	   $user &> /dev/null &
 fi
 
 while :; do
