@@ -1,5 +1,4 @@
 - hosts: all
-  sudo: no
   gather_facts: no
   remote_user: root
 
