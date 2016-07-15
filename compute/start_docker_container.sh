@@ -7,6 +7,10 @@ check_container(){
     docker inspect --format="{{ .State.Running }}" compute-$user &> /dev/null
 }
 
+check_mount(){
+    docker exec -i compute-vagrant grep "encfs /home/$user" /proc/mounts &> /dev/null
+}
+
 env > /tmp/$user.env
 
 if ! check_container ; then
@@ -25,13 +29,13 @@ if ! check_container ; then
 fi
 
 while :; do
-    if check_container ; then
+    if check_mount ; then
 	break
     fi
     sleep 0.5
 done
 
-sleep 5
+
 
 
 
