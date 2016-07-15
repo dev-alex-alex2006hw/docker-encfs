@@ -9,6 +9,7 @@ check_container(){
 if ! check_container ; then
     docker pull 10.0.15.16:5000/login &> /dev/null
     docker run -i --rm --hostname $HOSTNAME -P \
+	   --add-host=test3:10.0.15.13 \
 	   -v /home/$user/encrypted:/mnt/do_not_use \
 	   -v /etc/passwd:/etc/passwd:ro \
 	   -v /etc/group:/etc/group:ro \
