@@ -1,0 +1,5 @@
+$pbsserver test3
+$logeven 255
+$job_starter /var/spool/torque/mom_priv/job_starter
+$usecp *:/home /home
+

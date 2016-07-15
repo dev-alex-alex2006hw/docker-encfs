@@ -12,4 +12,8 @@ sudo docker run -i --rm -v /var/spool/torque/:/var/spool/torque/ ubuntu $*
 sleep 100
 cat /proc/1/cgroup
 
+/etc/sudoer:
+Defaults   env_keep += "LOGNAME"
+%hipaa ALL=(ALL) NOPASSWD: /usr/bin/exec_docker_container
+
 ```

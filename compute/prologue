@@ -1,0 +1,10 @@
+#!/bin/bash
+
+JOBID=$1
+JOBUSER=$2
+JOBGROUP=$3
+JOBNAME=$4
+JOBRESC=$5
+JOBQUEUE=$6
+
+/usr/bin/start_docker_container.sh $JOBUSER 86400

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+JOBID=$1
+JOBUSER=$2
+JOBGROUP=$3
+JOBNAME=$4
+JOBRESC=$5
+JOBQUEUE=$6
+
+
+docker stop compute-$JOBUSER &> /dev/null

@@ -1,0 +1,3 @@
+#!/bin/bash
+user=$LOGNAME
+docker exec -i -u `id -u $user` compute-$user $*
