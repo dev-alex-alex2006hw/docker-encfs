@@ -21,6 +21,36 @@ Defaults   env_keep += "LOGNAME"
 *hostbased auth, pam disabled
 *job containers are put in a private overlay network
 *container hostname is the same as host's hostname
-*openmpi usage: mpirun -host `paste -s -d, $PBS_NODEFILE` -n $PBS_NP excutable (--hostfile fails)
-*  
+*openmpi usage: mpirun --mca btl_tcp_if_include eth0 -host `paste -s -d, $PBS_NODEFILE` -n $PBS_NP excutable (--hostfile fails)
+
+
+network interface inside docker:
+[root@2b3117ac583c /]# ifconfig
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1450
+inet 10.0.0.4  netmask 255.255.255.0  broadcast 0.0.0.0
+inet6 fe80::42:aff:fe00:4  prefixlen 64  scopeid 0x20<link>
+ether 02:42:0a:00:00:04  txqueuelen 0  (Ethernet)
+RX packets 8  bytes 648 (648.0 B)
+RX errors 0  dropped 0  overruns 0  frame 0
+TX packets 8  bytes 648 (648.0 B)
+TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+inet 172.18.0.4  netmask 255.255.0.0  broadcast 0.0.0.0
+inet6 fe80::42:acff:fe12:4  prefixlen 64  scopeid 0x20<link>
+ether 02:42:ac:12:00:04  txqueuelen 0  (Ethernet)
+RX packets 13659  bytes 23617801 (22.5 MiB)
+RX errors 0  dropped 0  overruns 0  frame 0
+TX packets 9771  bytes 532568 (520.0 KiB)
+TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+inet 127.0.0.1  netmask 255.0.0.0
+inet6 ::1  prefixlen 128  scopeid 0x10<host>
+loop  txqueuelen 0  (Local Loopback)
+RX packets 108  bytes 16396 (16.0 KiB)
+RX errors 0  dropped 0  overruns 0  frame 0
+TX packets 108  bytes 16396 (16.0 KiB)
+TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
 ```
