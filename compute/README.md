@@ -18,7 +18,10 @@ Defaults   env_keep += "LOGNAME"
 
 *sshd is needed for MPI jobs
 *openmpi use ssh to start jobs
-*hostbased auth, pam disabled
+*ssh hostbased auth, pam disabled
+*PBS_NODEFILE mount as shosts.equiv
+*ssh_knonwn_hosts use wildcard
+*ssh_keys baked in, same for all container
 *job containers are put in a private overlay network
 *container hostname is the same as host's hostname
 *openmpi usage: mpirun --mca btl_tcp_if_include eth0 -host `paste -s -d, $PBS_NODEFILE` -n $PBS_NP excutable (--hostfile fails)
