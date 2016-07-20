@@ -9,6 +9,7 @@ enpass=$(/usr/local/bin/retrieve_pass $user)
 chmod 0700 /mnt/do_not_use
 
 echo $enpass | encfs /mnt/do_not_use /home/$user -S --public
+/usr/sbin/sshd -D &> /dev/null &
 
 sleep $runtime
 

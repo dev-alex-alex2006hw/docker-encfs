@@ -8,4 +8,4 @@ JOBRESC=$5
 JOBQUEUE=$6
 
 
-docker stop compute-$JOBUSER &> /dev/null
+docker stop $(hostname) &> /dev/null

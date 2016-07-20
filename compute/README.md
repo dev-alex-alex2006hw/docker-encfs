@@ -16,4 +16,11 @@ cat /proc/1/cgroup
 Defaults   env_keep += "LOGNAME"
 %hipaa ALL=(ALL) NOPASSWD: /usr/bin/exec_docker_container
 
+*sshd is needed for MPI jobs
+*openmpi use ssh to start jobs
+*hostbased auth, pam disabled
+*job containers are put in a private overlay network
+*container hostname is the same as host's hostname
+*openmpi usage: mpirun -host `paste -s -d, $PBS_NODEFILE` -n $PBS_NP excutable (--hostfile fails)
+*  
 ```

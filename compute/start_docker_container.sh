@@ -4,11 +4,11 @@ user=$1
 run_time=$2
 
 check_container(){
-    docker inspect --format="{{ .State.Running }}" compute-$user &> /dev/null
+    docker inspect --format="{{ .State.Running }}" $(hostname) &> /dev/null
 }
 
 check_mount(){
-    docker exec -i compute-vagrant grep "encfs /home/$user" /proc/mounts &> /dev/null
+    docker exec -i $(hostname) grep "encfs /home/$user" /proc/mounts &> /dev/null
 }
 
 env > /tmp/$user.env
@@ -18,13 +18,16 @@ if ! check_container ; then
     docker run -i --rm --hostname $HOSTNAME \
 	   -v /home/$user/encrypted:/mnt/do_not_use \
 	   -v /etc/passwd:/etc/passwd:ro \
+           -v /etc/ssh:/etc/ssh:ro \
 	   -v /etc/group:/etc/group:ro \
 	   -v /home/$user \
 	   --env-file /tmp/$user.env \
+	   --net stack-001 \
+	   -v /opt:/opt:ro \
            -v /var/spool/torque:/var/spool/torque \
 	   --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
-	   --name compute-$user 10.0.15.16:5000/compute \
+	   --name $(hostname) 10.0.15.16:5000/compute \
 	   $user $run_time &> /dev/null &
 fi
 
