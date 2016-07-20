@@ -1,7 +1,7 @@
 FROM centos:centos7
 
 
-RUN yum install -y openssh-server openssh-clients epel-release && \
+RUN yum install -y gcc openssh-server openssh-clients epel-release && \
     yum install -y fuse-encfs && \
     chmod 4755 /usr/libexec/openssh/ssh-keysign
 
