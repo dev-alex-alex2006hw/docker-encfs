@@ -7,5 +7,4 @@ JOBNAME=$4
 JOBRESC=$5
 JOBQUEUE=$6
 
-
 docker stop $(hostname) &> /dev/null
