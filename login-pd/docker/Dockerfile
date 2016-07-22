@@ -2,7 +2,7 @@ FROM centos:centos7
 
 COPY torque-6.0.1-1.adaptive.el7.centos.x86_64.rpm /usr/local/src/torque-6.0.1-1.adaptive.el7.centos.x86_64.rpm
 
-RUN yum install -y openssh-server openssh-clients epel-release && \
+RUN yum install -y gcc openssh-server openssh-clients epel-release && \
     yum install -y fuse-encfs /usr/local/src/torque-6.0.1-1.adaptive.el7.centos.x86_64.rpm 
 
 COPY server_name /var/spool/torque/server_name
