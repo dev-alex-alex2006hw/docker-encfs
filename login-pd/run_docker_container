@@ -2,6 +2,11 @@
 
 user=$LOGNAME
 
+# create private overlay network for each user for running jobs
+if ! docker network inspect net-$user &> /dev/null ; then
+    docker network create -d overlay net-$user &> /dev/null
+fi
+
 check_container(){
     docker inspect --format="{{ .State.Running }}" login-$user &> /dev/null
 }
@@ -16,6 +21,7 @@ if ! check_container ; then
 	   -v /etc/group:/etc/group:ro \
 	   -v /home/$user \
            -v /opt:/opt:ro \
+	   --net net-$user \
 	   --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
 	   --name login-$user 10.0.15.16:5000/login \
