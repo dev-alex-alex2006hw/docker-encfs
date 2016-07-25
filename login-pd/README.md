@@ -1,19 +1,11 @@
 ```
-login1: 
-login-pd: ssh force into container
-audit: store encfs key and passwd
-registry: store/provide docker images
-
-pbs_server:
-node1: prolog, job_starter, epilog for container
-node2:
 
 /etc/sudoer on login-pd:
 Defaults   env_keep += "LOGNAME"
 %hipaa ALL=(ALL) NOPASSWD: /usr/bin/run_docker_container
 
-ssh keys need to be copied to container, it is missing
-hostbased ssh need to cover all compute nodes, otherwise files cannot be copied over
+ssh keys need to be copied to container
+hostbased ssh need to cover both test1(login-normal) & test2(login-pd)
 
 sshd_config on host:
 Match User *,!root

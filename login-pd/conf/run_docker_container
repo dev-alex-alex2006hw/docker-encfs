@@ -5,6 +5,7 @@ user=$LOGNAME
 # create private overlay network for each user for running jobs
 if ! docker network inspect net-$user &> /dev/null ; then
     docker network create -d overlay net-$user &> /dev/null
+    logger User $user created docker overlay network net-$user
 fi
 
 check_container(){
@@ -26,13 +27,14 @@ if ! check_container ; then
 	   --cap-add SYS_ADMIN --device /dev/fuse \
 	   --name login-$user 10.0.15.16:5000/login \
 	   $user &> /dev/null &
+    logger User $user started a docker container login-$user
 fi
 
 while :; do
     if check_container ; then
 	break
     fi
-    sleep 0.5
+    sleep 1
 done
 
 docker port login-$user 22 | awk -F: '{print $2}'

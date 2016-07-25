@@ -128,7 +128,7 @@ UsePrivilegeSeparation sandbox		# Default for new installations.
 #VersionAddendum none
 
 # no default banner path
-Banner /etc/ssh/sshd_banner
+#Banner /etc/ssh/sshd_banner
 
 # Accept locale-related environment variables
 AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
