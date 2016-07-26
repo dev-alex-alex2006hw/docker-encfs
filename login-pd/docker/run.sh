@@ -9,6 +9,16 @@ chmod 0700 /mnt/do_not_use
 
 echo $enpass | encfs /mnt/do_not_use /home/$user -S --public
 
+if [ ! -f /home/$user/.bashrc ]; then 
+   cp /usr/local/src/.bashrc /home/$user/
+   chown $user:$user /home/$user/.bashrc  
+fi
+
+if [ ! -f /home/$user/.bash_profile ]; then
+   cp /usr/local/src/.bash_profile /home/$user/
+   chown $user:$user /home/$user/.bash_profile
+fi
+
 /usr/sbin/sshd -D &> /dev/null &
 /usr/sbin/trqauthd &> /dev/null &
 
