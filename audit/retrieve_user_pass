@@ -1,0 +1,5 @@
+#!/bin/bash
+
+user=$1
+MYPASS=$(cat /root/.mypass) pass user/$user
+logger $0: User $user retrieved password from ssh connection $SSH_CLIENT
