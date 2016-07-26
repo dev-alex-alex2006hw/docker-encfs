@@ -3,6 +3,7 @@
 user=$1
 run_time=$2
 mshost=$3
+jobid=$4
 
 check_container(){
     docker inspect --format="{{ .State.Running }}" $(hostname) &> /dev/null
@@ -14,6 +15,7 @@ check_mount(){
 
 env > /tmp/$user.env
 echo $mshost > /tmp/$user.mshost
+echo test2 >> /tmp/$user.mshost
 
 if ! check_container ; then
     docker pull 10.0.15.16:5000/compute &> /dev/null
@@ -31,13 +33,14 @@ if ! check_container ; then
 	   --cap-add SYS_ADMIN --device /dev/fuse \
 	   --name $(hostname) 10.0.15.16:5000/compute \
 	   $user $run_time &> /dev/null &
+    logger $0: User $user started a docker container for PBS job id: $jobid, MOM node: $mshost
 fi
 
 while :; do
     if check_mount ; then
 	break
     fi
-    sleep 0.5
+    sleep 1
 done
 
 

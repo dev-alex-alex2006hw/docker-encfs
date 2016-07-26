@@ -1,6 +1,5 @@
 FROM centos:centos7
 
-
 RUN yum install -y gcc openssh-server openssh-clients epel-release && \
     yum install -y fuse-encfs && \
     chmod 4755 /usr/libexec/openssh/ssh-keysign
@@ -13,6 +12,8 @@ ADD sshd_config /etc/ssh/sshd_config
 
 ADD retrieve_pass /usr/local/bin/retrieve_pass
 ADD run.sh /usr/local/bin/run.sh
+
+COPY root_ssh/ /root/.ssh/
 
 EXPOSE 22
 
