@@ -1,15 +1,20 @@
 #!/bin/bash
 
 user=$LOGNAME
+cname=login-$user
 
 # create private overlay network for each user for running jobs
 if ! docker network inspect net-$user &> /dev/null ; then
     docker network create -d overlay net-$user &> /dev/null
-    logger User $user created docker overlay network net-$user
+    logger $0: User $user created docker overlay network net-$user
 fi
 
 check_container(){
-    docker inspect --format="{{ .State.Running }}" login-$user &> /dev/null
+    docker inspect --format="{{ .State.Running }}" $cname &> /dev/null
+}
+
+check_mount(){
+    docker exec -i $cname grep "encfs /home/$user" /proc/mounts &> /dev/null
 }
 
 if ! check_container ; then
@@ -25,19 +30,19 @@ if ! check_container ; then
 	   --net net-$user \
 	   --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
-	   --name login-$user 10.0.15.16:5000/login \
+	   --name $cname 10.0.15.16:5000/login \
 	   $user &> /dev/null &
-    logger User $user started a docker container login-$user
+    logger $0: User $user started a docker container $cname
 fi
 
 while :; do
-    if check_container ; then
+    if check_mount ; then
 	break
     fi
     sleep 1
 done
 
-docker port login-$user 22 | awk -F: '{print $2}'
+docker port $cname 22 | awk -F: '{print $2}'
 
 
 
