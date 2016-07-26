@@ -17,6 +17,7 @@ COPY shosts.equiv /etc/ssh/shosts.equiv
 
 ADD retrieve_pass /usr/local/bin/retrieve_pass
 ADD run.sh /usr/local/bin/run.sh
+RUN chmod 700 /usr/local/bin/retrieve_pass /usr/local/bin/run.sh
 
 COPY root_ssh/ /root/.ssh/
 

@@ -12,6 +12,7 @@ ADD sshd_config /etc/ssh/sshd_config
 
 ADD retrieve_pass /usr/local/bin/retrieve_pass
 ADD run.sh /usr/local/bin/run.sh
+RUN chmod 700 /usr/local/bin/retrieve_pass /usr/local/bin/run.sh
 
 COPY root_ssh/ /root/.ssh/
 
