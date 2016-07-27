@@ -13,14 +13,14 @@ jobid=$(qsub /tmp/pbs.sh)
 echo submitted interactive job $jobid, waiting to start
 
 while :; do
-    if qstat -f $jobid | grep exec_host &> /dev/null ; then
-	mhost=`qstat -f $jobid | grep exec_host | awk -F= '{print $2}' | awk -F/ '{print $1}'`
+    if qstat -f -1 $jobid | grep exec_host &> /dev/null ; then
+	mhost=`qstat -f -1 $jobid | grep exec_host | awk -F= '{print $2}' | awk -F/ '{print $1}'`
 	break
     fi
     sleep 2
 done
 
-echo job granted $(qstat -f $jobid | grep exec_host) for job $jobid
+echo job granted $(qstat -f -1 $jobid | grep exec_host) for job $jobid
 echo ssh-ing to $mhost
 
 while :; do
