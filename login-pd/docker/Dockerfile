@@ -18,6 +18,7 @@ COPY shosts.equiv /etc/ssh/shosts.equiv
 COPY bashrc /usr/local/src/.bashrc
 COPY bash_profile /usr/local/src/.bash_profile
 
+ADD qint /usr/bin/qint
 ADD retrieve_pass /usr/local/bin/retrieve_pass
 ADD run.sh /usr/local/bin/run.sh
 RUN chmod 700 /usr/local/bin/retrieve_pass /usr/local/bin/run.sh
