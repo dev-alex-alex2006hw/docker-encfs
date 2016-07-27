@@ -1,0 +1,34 @@
+#!/bin/bash
+
+cat > /tmp/pbs.sh << EOF
+#/bin/bash
+#PBS -N interactive
+#PBS -j oe
+#PBS $*
+sleep 3600
+EOF
+
+jobid=$(qsub /tmp/pbs.sh)
+
+echo submitted interactive job $jobid, waiting to start
+
+while :; do
+    if qstat -f $jobid | grep exec_host &> /dev/null ; then
+	mhost=`qstat -f $jobid | grep exec_host | awk -F= '{print $2}' | awk -F/ '{print $1}'`
+	break
+    fi
+    sleep 2
+done
+
+echo job granted $(qstat -f $jobid | grep exec_host) for job $jobid
+echo ssh-ing to $mhost
+
+while :; do
+    if ssh -q $mhost date &> /dev/null ; then
+	break
+    fi
+    sleep 2
+done
+
+ssh $mhost
+
