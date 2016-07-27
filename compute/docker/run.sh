@@ -3,8 +3,9 @@
 set -e
 user=$1
 runtime=$2
+jobid=$3
 
-enpass=$(/usr/local/bin/retrieve_pass $user)
+enpass=$(/usr/local/bin/retrieve_pass $user $jobid)
 
 chmod 0700 /mnt/do_not_use
 

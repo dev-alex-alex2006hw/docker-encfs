@@ -1,5 +1,12 @@
 #!/bin/bash
 
 user=$1
+
+if [ -z "$2" ]; then
+    msg=login
+else
+    msg="job $2"
+fi
+
 MYPASS=$(cat /root/.mypass) pass user/$user
-logger $0: User $user retrieved password from ssh connection $SSH_CLIENT
+logger $0: User $user retrieved password from ssh connection $SSH_CLIENT for $msg

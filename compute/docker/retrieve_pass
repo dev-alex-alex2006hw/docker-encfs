@@ -1,3 +1,4 @@
 #!/bin/bash
 user=$1
-ssh 10.0.15.16 /usr/bin/retrieve_user_pass $user
+jobid=$2
+ssh 10.0.15.16 /usr/bin/retrieve_user_pass $user $jobid

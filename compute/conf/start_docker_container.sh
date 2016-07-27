@@ -32,7 +32,7 @@ if ! check_container ; then
 	   --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
 	   --cap-add SYS_ADMIN --device /dev/fuse \
 	   --name $(hostname) 10.0.15.16:5000/compute \
-	   $user $run_time &> /dev/null &
+	   $user $run_time $jobid &> /dev/null &
     logger $0: User $user started a docker container for PBS job id: $jobid, MOM node: $mshost
 fi
 
