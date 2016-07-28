@@ -1,7 +1,5 @@
 ```
-job_starter:
-sudo docker run -i --rm -v /var/spool/torque/:/var/spool/torque/ ubuntu $*
-## job script is saved by torque as /var/spool/torque/mom_priv/jobs/27.test3.SC
+job script is saved by torque as /var/spool/torque/mom_priv/jobs/27.test3.SC
 
 [root@test4 ~]# cat /var/spool/torque/mom_priv/jobs/27.test3.SC
 #!/bin/bash
@@ -19,13 +17,12 @@ Defaults   env_keep += "LOGNAME"
 *sshd is needed for MPI jobs
 *openmpi use ssh to start jobs
 *ssh hostbased auth, pam disabled
-*/etc/ssh/shosts.equiv have PBS_MSHOST
+*/etc/ssh/shosts.equiv have PBS_MSHOST and login-pd
 *ssh_knonwn_hosts use wildcard
 *ssh_keys baked in, same for all container
 *job containers are put in a private overlay network
 *container hostname is the same as host's hostname
 *openmpi usage: mpirun --mca btl_tcp_if_include eth0 -host `paste -s -d, $PBS_NODEFILE` -n $PBS_NP excutable (--hostfile fails)
-*ssh to compute nodes during job run = off
 
 network interface inside docker with overlay network eth0:
 [root@2b3117ac583c /]# ifconfig
