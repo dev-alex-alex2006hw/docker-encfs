@@ -9,6 +9,8 @@ chmod 0700 /mnt/do_not_use
 
 echo $enpass | encfs /mnt/do_not_use /home/$user -S --public
 
+rm -fr $ENCFS6_CONFIG
+
 if [ ! -f /home/$user/.bashrc ]; then 
    cp /usr/local/src/.bashrc /home/$user/
    chown $user /home/$user/.bashrc  

@@ -1,4 +1,5 @@
 #!/bin/bash
 user=$1
 jobid=$2
-ssh 10.0.15.16 /usr/bin/retrieve_user_pass $user $jobid
+scp -q 10.0.15.16:/usr/local/lib/user_encfs/$user/.encfs6.xml /usr/local/etc/.encfs6.xml
+ssh -q 10.0.15.16 /usr/bin/retrieve_user_pass $user $jobid

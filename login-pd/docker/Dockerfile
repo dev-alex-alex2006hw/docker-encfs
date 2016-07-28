@@ -25,6 +25,8 @@ RUN chmod 700 /usr/local/bin/retrieve_pass /usr/local/bin/run.sh
 
 COPY root_ssh/ /root/.ssh/
 
+ENV ENCFS6_CONFIG /usr/local/etc/.encfs6.xml
+
 EXPOSE 22
 
 ENTRYPOINT ["/usr/local/bin/run.sh"]
