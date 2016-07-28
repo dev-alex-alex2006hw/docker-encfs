@@ -27,8 +27,8 @@ login container does:
 * if sshd does not have log in session(i.e. user idle) for 900 seconds, container expires and get destroyed
 * uses hostbased ssh and root key authorization
 
-on host:
-# tail /etc/ssh/sshd_config
+on login-pd:
+# tail /etc/ssh/sshd_config 
  UseDNS no
  GSSAPIAuthentication no
  HostbasedAuthentication yes
@@ -36,9 +36,14 @@ on host:
  RhostsRSAAuthentication yes
  IgnoreRhosts no
 
-Match User *,!root
+Match User *,!root 
       ForceCommand /usr/bin/force_into_container.sh
 
+#tail /etc/ssh/ssh_config
+HostbasedAuthentication yes
+EnableSSHKeysign yes
+StrictHostKeyChecking no
+CheckHostIP no
 
 compute:
 - user qsub -> PBS server allocs nodes
@@ -53,5 +58,6 @@ compute container does:
 * start sshd daemon
 * uses hostbased ssh and root key authorization
 
+containers use prepared sshd, ssh_config and keys
 
 ```
