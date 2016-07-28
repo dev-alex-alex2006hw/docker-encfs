@@ -10,15 +10,22 @@ node2: (test5)
 
 audit: store encfs key and passwd (test6)
 registry: store/provide docker images (test6)
+consul: docker overlay network (test6)
 
 login-pd:
 - user ssh -> sshd ForceCommand "force_into_container.sh"
-    --- start container login-$user
-    --- login-$user starts sshd to allow user log in and data scp
+    --- create user's private overlay network is not present
+    --- start container login-$user under user's private overlay network
     --- second ssh into container compute-$user
 
-* if sshd does not have log in session(i.e. user idle) for 900 seconds, container will expire and get destroyed
-* hostbased ssh authorization inside container, need to have all compute nodes for torque
+login container does:
+* retrieve encfs key and password from audit
+* mount encfs and then destroys the key
+* prepare bashrc and bash_profile if not present
+* start sshd daemon
+* start trqauthd daemon for PBS
+* if sshd does not have log in session(i.e. user idle) for 900 seconds, container expires and get destroyed
+* uses hostbased ssh and root key authorization
 
 on host:
 # tail /etc/ssh/sshd_config
@@ -32,20 +39,19 @@ on host:
 Match User *,!root
       ForceCommand /usr/bin/force_into_container.sh
 
-Better Security:
 
-only allow a user to access a particular container:
+compute:
+- user qsub -> PBS server allocs nodes
+     --- prologue.parallel(runs first on rest nodes) and prologue(runs 2nd on MOM node) starts compute containers under user's private overlay network
+     --- PBS job_starter starts job from MOM node
+     --- mpi jobs are launched from MOM node via ssh to rest nodes
+     --- job finish, epiplogue.parallel and epilogue destroys compute container
 
-cat /usr/bin/run_docker_cmd
-#!/bin/sh
-docker run -ti --rm  --cap-drop=all -u 3267  centos /bin/bash
-
-After writing the script, configure sudoers to run it:
-
-grep user1 /etc/sudoers
-user1        ALL=(ALL)       NOPASSWD: /usr/bin/run_docker_cmd
+compute container does:
+* retrieve encfs key and password from audit
+* mount encfs and then destroys the key
+* start sshd daemon
+* uses hostbased ssh and root key authorization
 
 
-encfs key separation:
-ENCFS6_CONFIG=/home/me/.encfs6.xml encfs /tmp/crypt-view /tmp/plain-view
 ```
