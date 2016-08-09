@@ -25,7 +25,6 @@ if ! check_container ; then
            -v /opt:/opt:ro \
 	   -v /etc/passwd:/etc/passwd:ro \
 	   -v /etc/group:/etc/group:ro \
-	   -v /home/$user \
            -v /opt:/opt:ro \
 	   --net net-$user \
 	   --cap-drop FOWNER --cap-drop SETPCAP --cap-drop SETFCAP --cap-drop MKNOD \
