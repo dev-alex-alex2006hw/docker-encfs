@@ -5,7 +5,8 @@ cat >  /etc/docker/daemon.json << EOF
 {
     "insecure-registries": ["10.0.15.16:5000"],
     "cluster-store": "consul://10.0.15.16:8500",
-    "cluster-advertise": "enp0s8:2375"
+    "cluster-advertise": "enp0s8:2375",
+    "storage-driver": "overlay"
 }
 EOF
 
