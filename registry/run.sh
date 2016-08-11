@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#overlayfs for docker storage
+echo "overlay" > /etc/modules-load.d/overlay.conf
+#reboot
+lsmod | grep overlay
+
 #on all nodes, cluster stuff is for multi-node clustering
 cat >  /etc/docker/daemon.json << EOF
 {
